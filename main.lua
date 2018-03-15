@@ -1,8 +1,8 @@
 Gamestate = require "libs.gamestate"
-local mainmenu = require "states.mainmenu"
-local overworld = require "states.overworld"
-local battle = require "states.battle"
-local pausemenu = require "states.pausemenu"
+mainmenu = require "states.mainmenu"
+overworld = require "states.overworld"
+battle = require "states.battle"
+pausemenu = require "states.pausemenu"
 
 function love.load()
     window = {}

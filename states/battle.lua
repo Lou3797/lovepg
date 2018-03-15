@@ -1,6 +1,3 @@
-Gamestate = require "libs.gamestate"
-local overworld = require "states.overworld"
-local pausemenu = require "states.pausemenu"
 local battle = {}
 
 function battle:init()
