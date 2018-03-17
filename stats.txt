@@ -1,0 +1,25 @@
+HP - Hit point maximum
+MP - Magic point maximum
+XP - Current experience gained
+
+ATK - Base phyiscal damage
+DEF - Base physical defense
+
+MGA - Base magical damage
+MGD - Base magical defense
+
+CON - Affects health regen
+WIL - Affects magic regen
+
+STR - Affects attack odds
+INT - Affects magical odds
+
+VIT - Affects maximum temp HP
+WIS - Affects maximum temp MP
+
+AGI - Affects turn speed
+CON - Affects resist odds
+EVA - Affects evasion
+LCK - Affects general odds
+
+CHA - Affects sell price

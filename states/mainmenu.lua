@@ -8,6 +8,10 @@ function mainmenu:enter()
 
 end
 
+function mainmenu:resume()
+
+end
+
 function mainmenu:leave()
 
 end
@@ -18,7 +22,8 @@ end
 
 function mainmenu:draw()
     love.graphics.setColor(255, 255, 255, 255)
-    love.graphics.print("Press \'Z\' to Start", 10, 10)
+    love.graphics.print("ZOOTOPIA\n\nTHE NIGHTHOWLER STONE\n\n" ..
+    "\n\n\n\n>PRESS \'Z\' TO START", 16, 16)
 end
 
 function mainmenu:keypressed(key)
