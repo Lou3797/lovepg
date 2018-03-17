@@ -3,7 +3,7 @@ function newPointer(xo, yo, items, dy, menuName)
 
     pointer.quad = love.graphics.newQuad(8, 24, 16, 16, tiles:getDimensions())
     pointer.current = 1
-    pointer.items = items
+    pointer.size = items
     pointer.xo = xo
     pointer.yo = yo
     pointer.dy = dy
@@ -11,7 +11,7 @@ function newPointer(xo, yo, items, dy, menuName)
     pointer.isFocused = true
 
     function pointer:moveDown()
-        if pointer.isFocused and pointer.current+1 <= items then
+        if pointer.isFocused and pointer.current+1 <= pointer.size then
             pointer.current = pointer.current+1
         end
     end
@@ -35,6 +35,11 @@ function newPointer(xo, yo, items, dy, menuName)
     function pointer:toggle()
         pointer.isVisible = not pointer.isVisible
         pointer.isFocused = not pointer.isFocused
+    end
+
+    function pointer:changeSize(len)
+        pointer:reset()
+        pointer.size = len
     end
 
     return pointer

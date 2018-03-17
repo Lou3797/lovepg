@@ -4,10 +4,10 @@ local swapTimer = 0.33
 local currentEncounter = {}
 
 local pointer = {
-    [1]=newPointer(18, 6, table.getn(party), 9),
+    [1]=newPointer(19, 6, table.getn(party), 9),
     [2]=newPointer(20, 15, 6, 2),
-    [3]=newPointer(19, 15, 10, 2),
-    ["current"]=1, ["picked"]=1, ["action"]=1
+    [3]=newPointer(19, 15, 7, 2),
+    ["current"]=1, ["picked"]=1, ["action"]=1, ["subAction"]=1
 }
 
 local messageBox = newMenuBox(0, 21, 19, 9)
@@ -121,7 +121,12 @@ function battle:update(dt)
         end
     elseif pointer.current == 4 then
         tempTipStr = ">"..currentEncounter.enemies[pointer[pointer.current].current].name
+    elseif pointer.current == 3 and pointer.action == 4 then
+        --tempTipStr = ">"..partyItems[pointer[pointer.current].current][1].name
+        tipStr = partyItems[pointer[pointer.current].current][1].desc
+        tempTipStr = ""
     end
+    
 
 end
 
@@ -148,10 +153,13 @@ function battle:draw()
     --Draw enemy sprites
     currentEncounter:draw()
 
-    --Display action menu
-    if pointer.current == 2 then
+    if pointer.current ~= 1 then
         pickedBox:draw()
         drawPartyMemberInfo(pointer.picked, 0)
+    end
+
+    --Display action menu
+    if pointer.current == 2 then
         commandBox:draw()
         love.graphics.print("ATTACK\n\nSPELL\n\nDEFEND\n\nITEM\n\nCHECK\n\nRUN", 22*8, 15*8)
 
@@ -160,8 +168,25 @@ function battle:draw()
     --Display sub-action menu
     if pointer.current == 3 then
         subActionBox:draw()
-        love.graphics.print("~SPELLS~", 20*8, 13*8)
-        love.graphics.print("QUICK DRAW\n\nROYAL SHLD", 21*8, 15*8)
+        if pointer.action == 4 then
+            love.graphics.print("~ITEM~", 20*8, 13*8)
+            for i,v in ipairs(partyItems) do
+                local item = partyItems[i][1]
+                love.graphics.print(item.name, 21*8, ((i*2)+13)*8)
+                love.graphics.print("x"..partyItems[i][2], 28*8, ((i*2)+13)*8)
+                
+
+                --love.graphics.print(pointer.current, 0, 100)
+                --love.graphics.print((table.getn(partyItems)), 0, 110)
+                --love.graphics.print(pointer[pointer.current].current.."/", 0, 120)
+                --love.graphics.print(pointer[pointer.current].size, 0, 130)
+            end
+        elseif pointer.action == 2 then
+            --love.graphics.print("~SPELL~", 20*8, 13*8)
+            --love.graphics.print(pointer.current, 0, 100)
+            --love.graphics.print(pointer[pointer.current].current.."/", 0, 120)
+            --love.graphics.print(pointer[pointer.current].size, 0, 130)
+        end
     end
 
     pointer[pointer.current]:draw()
@@ -171,13 +196,15 @@ end
 function battle:keypressed(key)
     if key == 'up' then
         pointer[pointer.current]:moveUp()
+
     elseif key == 'down' then
         pointer[pointer.current]:moveDown()
+
     --Choose Action
     elseif key == 'z' then
         if pointer.current == 1 then
             if partyBars[pointer[pointer.current].current]["TB"].getPercent() < 100 then
-
+                --Do nothing if percent is less than 100%
             else
                 pointer.picked = pointer[pointer.current].current
                 pointer.current = 2
@@ -185,8 +212,17 @@ function battle:keypressed(key)
             
         elseif pointer.current == 2 then
             pointer.action = pointer[pointer.current].current
-            pointer.current = 3
-            tipStr = tipStr..tempTipStr
+            if pointer.action == 4 then
+                pointer.current = 3
+                pointer[pointer.current]:changeSize(table.getn(partyItems))
+            elseif pointer.action == 2 then
+                --pointer[pointer.current]:changeSize(table.getn(partyItems))
+                pointer.current = 3
+            elseif pointer.action == 1 or pointer.action == 5 then
+                pointer.current = 4
+                tipStr = tipStr..tempTipStr
+            end
+            
         end
     --Cancel Action
     elseif key == 'x' then
@@ -196,28 +232,26 @@ function battle:keypressed(key)
         elseif pointer.current == 4 then
             pointer[pointer.current]:reset()
             pointer.current = 2
-
+        elseif pointer.current == 3 then
+            pointer[pointer.current]:reset()
+            pointer.current = 2
         end
 
-
+    --Pause battle
     elseif key == 'return' then
         Gamestate.push(battlepause)
-    end
+    
 
     
-    if key == 'right' then
+    elseif key == 'right' then
         if pointer.current == 4 then
             pointer[pointer.current]:moveRight()
         end
-        --party[2]:changeStat("MP", 5)
-        --partyBars[2][2]:update(party[2].stats.MP)
-    end
-    if key == 'left' then
+
+    elseif key == 'left' then
         if pointer.current == 4 then
             pointer[pointer.current]:moveLeft()
         end
-        --party[2]:changeStat("MP", -5)
-        --partyBars[2][2]:update(party[2].stats.MP)
     end
     
     

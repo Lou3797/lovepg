@@ -18,3 +18,19 @@ function newPartyMember(name, class, imgX, imgY, stats, moveset)
 
     return member
 end
+
+function newMove(name, desc, type, mod)
+    local move = {}
+
+    move.name = name
+    move.desc = desc
+    move.type = type
+    move.mod = mod
+
+    return move
+end
+
+moves = {
+    newMove(),
+    newMove("ROYAL SHLD", "INCREASE DEF 15% TO ALLY.")
+}
