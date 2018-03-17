@@ -25,8 +25,8 @@ function createPartyBars()
         local stats = party[i].stats
         memberBars["HP"] = newBar(24*8, (6+((i-1)*9))*8, stats["MHP"], stats["HP"], 7, 0) --HP
         memberBars["MP"] = newBar(24*8, (8+((i-1)*9))*8, stats["MMP"], stats["MP"], 7, 1) --MP
-        memberBars["TB"] = newBar(24*8, (4+((i-1)*9))*8, stats["TB"], 0, 7, 3) --TB
-        memberBars["SB"] = newBar(24*8, (4+((i-1)*9))*8, stats["SB"], 0, 7, 4) --SB
+        memberBars["TB"] = newBar(24*8, (4+((i-1)*9))*8, stats["TB"], 0, 4, 3) --TB
+        memberBars["SB"] = newBar(24*8, (4+((i-1)*9))*8, stats["SB"], 0, 4, 4) --SB
         partyBars[i] = memberBars
     end
 end
@@ -49,17 +49,13 @@ function battle:leave()
 end
 
 function battle:update(dt)
+    --Increment TB and SB
     for i,v in ipairs(party) do
         local timeFactor = 8
         local specialFactor = 4.5
         if partyBars[i]["TB"].current+(dt*timeFactor) < partyBars[i]["TB"].max then
             partyBars[i]["TB"]:update(partyBars[i]["TB"].current+(dt*timeFactor))
         else
-            swapTimer = swapTimer-dt
-            if swapTimer <= 0 then
-                partyBars[i]["SB"]:swapRow()
-                swapTimer = 0.33
-            end
             partyBars[i]["TB"]:update(partyBars[i]["TB"].max)
             if partyBars[i]["SB"].current+(dt*specialFactor) < partyBars[i]["SB"].max then
                 partyBars[i]["SB"]:update(partyBars[i]["SB"].current+(dt*specialFactor))
@@ -67,7 +63,15 @@ function battle:update(dt)
                 partyBars[i]["SB"]:update(partyBars[i]["SB"].max)
             end
         end
-    end 
+    end
+    --Swap SB colors
+    swapTimer = swapTimer-dt
+    if swapTimer <= 0 then
+        for i,v in ipairs(party) do
+            partyBars[i]["SB"]:swapRow()
+            swapTimer = 0.33
+        end
+    end
 end
 
 function battle:draw()
@@ -111,7 +115,6 @@ end
 
 function battle:keypressed(key)
     if key == 'up' then
-        --pointer.y = pointer.y-9
         pointer:moveUp()
     end
     if key == 'down' then
