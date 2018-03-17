@@ -1,5 +1,10 @@
 function newItem(name, desc, stat, effect)
     local item = {}
+    
+    item.name = name
+    item.desc = desc
+    item.stat = stat
+    item.effect = effect
 
     return item
 end
