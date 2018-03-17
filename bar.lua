@@ -1,7 +1,7 @@
 function fillBarQuads(row)
     local bar = {}
     for i=0,8 do
-        bar[i] = love.graphics.newQuad((3+i)*8, row*8, 8, 8, tiles:getDimensions())
+        bar[i] = love.graphics.newQuad((4+i)*8, (7+row)*8, 8, 8, tiles:getDimensions())
     end
     return bar
 end

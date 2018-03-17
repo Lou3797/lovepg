@@ -17,5 +17,12 @@ function newEncounter(enemies)
     
     encounter.enemies = enemies
 
+    function encounter:draw()
+        for i,v in ipairs(encounter.enemies) do
+            local enemy = encounter.enemies[i]
+            love.graphics.draw(tiles, enemy.img, 8*enemy.xo, 8*enemy.yo)
+        end
+    end
+
     return encounter
 end

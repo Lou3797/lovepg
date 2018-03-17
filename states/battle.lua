@@ -6,8 +6,8 @@ local currentEncounter = {}
 local pointer = {
     [1]=newPointer(18, 6, table.getn(party), 9),
     [2]=newPointer(20, 15, 6, 2),
-    [3]=newPointer(19, 6, table.getn(party), 9), 
-    ["current"]=1, ["picked"]=1
+    [3]=newPointer(19, 14, 10, 2),
+    ["current"]=1, ["picked"]=1, ["action"]=1
 }
 
 local messageBox = newMenuBox(0, 21, 19, 9)
@@ -32,7 +32,7 @@ function createPartyBars()
         local stats = party[i].stats
         memberBars["HP"] = newBar(stats["MHP"], stats["HP"], 7, 0) --HP
         memberBars["MP"] = newBar(stats["MMP"], stats["MP"], 7, 1) --MP
-        memberBars["TB"] = newBar(stats["TB"], 0, 7, 3) --TB
+        memberBars["TB"] = newBar(stats["TB"], 100, 7, 3) --TB
         memberBars["SB"] = newBar(stats["SB"], 0, 7, 4) --SB
         partyBars[i] = memberBars
     end
@@ -59,6 +59,7 @@ end
 function battle:enter(prevState, encounter)
     createPartyBars()
     currentEncounter = encounter
+    pointer[4]=newEncounterPointer(encounter)
 end
 
 function battle:resume()
@@ -72,9 +73,9 @@ end
 function battle:update(dt)
     --Increment TB and SB
     for i,v in ipairs(party) do
-        local timeFactor = 8
-        local specialFactor = 4.5
-        if partyBars[i]["TB"].current+(dt*timeFactor) < partyBars[i]["TB"].max then
+        local timeFactor = party[i].stats["AGI"]/2
+        local specialFactor = party[i].stats["AGI"]/2.5
+        if partyBars[i]["TB"].current+(dt*timeFactor) < partyBars[i]["TB"].max then --and current bar does not equal max value
             partyBars[i]["TB"]:update(partyBars[i]["TB"].current+(dt*timeFactor))
         else
             partyBars[i]["TB"]:update(partyBars[i]["TB"].max)
@@ -97,14 +98,23 @@ function battle:update(dt)
     --Update tooltip
     local curPoint = pointer[pointer.current]
     if pointer.current == 1 then
-        local curSelect = curPoint:select()
+        local curSelect = curPoint.current
+        tipStr = party[curSelect].name..">"
         if partyBars[curSelect]["TB"].getPercent() < 100 then
-            tipStr = "NOT READY!"
+            tempTipStr = "NOT READY!"
         else 
-            tipStr = "READY!"
+            tempTipStr = "READY!"
         end
     elseif pointer.current == 2 then
         tipStr = party[pointer.picked].name
+        local curSelect = curPoint.current
+        if curSelect == 1 then tempTipStr = ">ATTACK"
+        elseif curSelect == 2 then tempTipStr = ">SPELL"
+        elseif curSelect == 3 then tempTipStr = ">DEFEND"
+        elseif curSelect == 4 then tempTipStr = ">ITEM"
+        elseif curSelect == 5 then tempTipStr = ">CHECK"
+        elseif curSelect == 6 then tempTipStr = ">RUN"
+        end
     end
 
 end
@@ -124,18 +134,19 @@ function battle:draw()
         drawPartyMemberInfo(i)
     end
 
-    love.graphics.print(tipStr, 8, 8)
+    love.graphics.print(tipStr..tempTipStr, 8, 8)
     love.graphics.print(messageStr, 8, 22*8)
-    --love.graphics.print("~POULTICE~\n\n+10% AGI\n\nTO SELF", 19*8, 20*8)
     --love.graphics.print("+AGI", 21*8, 9*8)
     --love.graphics.print("+LCK", 26*8, 9*8)
-
     --contextBox:draw()
     --love.graphics.print("~SPELLS~", 20*8, 13*8)
     --love.graphics.print("QUICK DRAW\n\nROYAL SHLD", 21*8, 15*8)
 
+    --Draw enemy sprites
+    currentEncounter:draw()
+
     --Display action menu
-    if pointer.current == 2 then
+    if pointer.current == 2 or pointer.current == 4 then
         pickedBox:draw()
         drawPartyMemberInfo(pointer.picked, 0)
         commandBox:draw()
@@ -143,7 +154,7 @@ function battle:draw()
 
     end
 
-    messageStr = currentEncounter.enemies[1].name
+    messageStr = currentEncounter.enemies[2].name
 
     pointer[pointer.current]:draw()
    
@@ -156,15 +167,15 @@ function battle:keypressed(key)
         pointer[pointer.current]:moveDown()
     elseif key == 'z' then
         if pointer.current == 1 then
-            if partyBars[pointer[pointer.current]:select()]["TB"].getPercent() < 100 then
+            if partyBars[pointer[pointer.current].current]["TB"].getPercent() < 100 then
 
             else
-                pointer.picked = pointer[pointer.current]:select()
+                pointer.picked = pointer[pointer.current].current
                 pointer.current = 2
             end
             
         elseif pointer.current == 2 then
-
+            pointer.current = 4
         end
     elseif key == 'x' then
         if pointer.current == 2 then
@@ -177,16 +188,22 @@ function battle:keypressed(key)
         Gamestate.push(battlepause)
     end
 
-    --[[
+    
     if key == 'right' then
-        party[2]:changeStat("MP", 5)
-        partyBars[2][2]:update(party[2].stats.MP)
+        if pointer.current == 4 then
+            pointer[pointer.current]:moveRight()
+        end
+        --party[2]:changeStat("MP", 5)
+        --partyBars[2][2]:update(party[2].stats.MP)
     end
     if key == 'left' then
-        party[2]:changeStat("MP", -5)
-        partyBars[2][2]:update(party[2].stats.MP)
+        if pointer.current == 4 then
+            pointer[pointer.current]:moveLeft()
+        end
+        --party[2]:changeStat("MP", -5)
+        --partyBars[2][2]:update(party[2].stats.MP)
     end
-    ]]--
+    
     
 end
 

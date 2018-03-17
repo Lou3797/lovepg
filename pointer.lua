@@ -28,10 +28,6 @@ function newPointer(xo, yo, items, dy, menuName)
         end
     end
 
-    function pointer:select()
-        return pointer.current
-    end
-
     function pointer:reset()
         pointer.current = 1
     end
@@ -39,6 +35,28 @@ function newPointer(xo, yo, items, dy, menuName)
     function pointer:toggle()
         pointer.isVisible = not pointer.isVisible
         pointer.isFocused = not pointer.isFocused
+    end
+
+    return pointer
+end
+
+function newEncounterPointer(encounter)
+    local pointer = newPointer(0, 0, table.getn(encounter.enemies), 1)
+    pointer.encounter = encounter
+    
+    function pointer:moveLeft()
+        pointer:moveUp()
+    end
+
+    function pointer:moveRight()
+        pointer:moveDown()
+    end
+
+    function pointer:draw()
+        if pointer.isVisible then
+            local enemy = pointer.encounter.enemies[pointer.current]
+            love.graphics.draw(tiles, pointer.quad, (enemy.xo-1)*8, (enemy.yo+1)*8)
+        end
     end
 
     return pointer
