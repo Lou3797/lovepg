@@ -5,6 +5,7 @@ function newEnemy(name, xo, yo, imgX, imgY, imgW, imgH, stats, moveset)
     enemy.xo = xo
     enemy.yo = yo
     enemy.img = love.graphics.newQuad(imgX, imgY, imgW, imgH, tiles:getDimensions())
+    enemy.imgH = imgH
     enemy.stats = stats
     enemy.moveset = moveset
     enemy.mods = {{}, {}}

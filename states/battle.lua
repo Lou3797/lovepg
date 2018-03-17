@@ -6,7 +6,7 @@ local currentEncounter = {}
 local pointer = {
     [1]=newPointer(18, 6, table.getn(party), 9),
     [2]=newPointer(20, 15, 6, 2),
-    [3]=newPointer(19, 14, 10, 2),
+    [3]=newPointer(19, 15, 10, 2),
     ["current"]=1, ["picked"]=1, ["action"]=1
 }
 
@@ -17,7 +17,7 @@ local tipStr = ""
 local tempTipStr = ""
 
 local commandBox = newMenuBox(20, 13, 11, 16)
-local contextBox = newMenuBox(19, 12, 13, 18)
+local subActionBox = newMenuBox(19, 12, 13, 18)
 local pickedBox = newMenuBox(19, 3, 13, 9)
 
 local partyBoxes = {}
@@ -51,6 +51,9 @@ function drawPartyMemberInfo(i, yShift)
     partyBars[i]["SB"]:draw(24*8, (4+yShift)*8)
 end
 
+function executeCommand()
+
+end
 
 function battle:init()
     
@@ -86,6 +89,7 @@ function battle:update(dt)
             end
         end
     end
+
     --Swap SB colors
     swapTimer = swapTimer-dt
     if swapTimer <= 0 then
@@ -115,6 +119,8 @@ function battle:update(dt)
         elseif curSelect == 5 then tempTipStr = ">CHECK"
         elseif curSelect == 6 then tempTipStr = ">RUN"
         end
+    elseif pointer.current == 4 then
+        tempTipStr = ">"..currentEncounter.enemies[pointer[pointer.current].current].name
     end
 
 end
@@ -138,15 +144,12 @@ function battle:draw()
     love.graphics.print(messageStr, 8, 22*8)
     --love.graphics.print("+AGI", 21*8, 9*8)
     --love.graphics.print("+LCK", 26*8, 9*8)
-    --contextBox:draw()
-    --love.graphics.print("~SPELLS~", 20*8, 13*8)
-    --love.graphics.print("QUICK DRAW\n\nROYAL SHLD", 21*8, 15*8)
 
     --Draw enemy sprites
     currentEncounter:draw()
 
     --Display action menu
-    if pointer.current == 2 or pointer.current == 4 then
+    if pointer.current == 2 then
         pickedBox:draw()
         drawPartyMemberInfo(pointer.picked, 0)
         commandBox:draw()
@@ -154,7 +157,12 @@ function battle:draw()
 
     end
 
-    messageStr = currentEncounter.enemies[2].name
+    --Display sub-action menu
+    if pointer.current == 3 then
+        subActionBox:draw()
+        love.graphics.print("~SPELLS~", 20*8, 13*8)
+        love.graphics.print("QUICK DRAW\n\nROYAL SHLD", 21*8, 15*8)
+    end
 
     pointer[pointer.current]:draw()
    
@@ -165,6 +173,7 @@ function battle:keypressed(key)
         pointer[pointer.current]:moveUp()
     elseif key == 'down' then
         pointer[pointer.current]:moveDown()
+    --Choose Action
     elseif key == 'z' then
         if pointer.current == 1 then
             if partyBars[pointer[pointer.current].current]["TB"].getPercent() < 100 then
@@ -175,12 +184,19 @@ function battle:keypressed(key)
             end
             
         elseif pointer.current == 2 then
-            pointer.current = 4
+            pointer.action = pointer[pointer.current].current
+            pointer.current = 3
+            tipStr = tipStr..tempTipStr
         end
+    --Cancel Action
     elseif key == 'x' then
         if pointer.current == 2 then
             pointer[pointer.current]:reset()
             pointer.current = 1
+        elseif pointer.current == 4 then
+            pointer[pointer.current]:reset()
+            pointer.current = 2
+
         end
 
 

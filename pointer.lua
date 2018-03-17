@@ -55,7 +55,7 @@ function newEncounterPointer(encounter)
     function pointer:draw()
         if pointer.isVisible then
             local enemy = pointer.encounter.enemies[pointer.current]
-            love.graphics.draw(tiles, pointer.quad, (enemy.xo-1)*8, (enemy.yo+1)*8)
+            love.graphics.draw(tiles, pointer.quad, (enemy.xo-1)*8, ((enemy.yo)*8)+((enemy.imgH/2)-8) )
         end
     end
 

@@ -1,13 +1,17 @@
 tiles = love.graphics.newImage("img/tiles.png")
 
 partymember = require "partymember"
+item = require "item"
 party = {
     newPartyMember("JUDY", "knight", 0, 56,
     {["MHP"]=70, ["HP"]=19, ["MMP"]=16, ["MP"]=3, ["TB"]=95, ["SB"]=75, ["AGI"]=15}), 
     newPartyMember("NICK", "rogue", 0, 88,
     {["MHP"]=36, ["HP"]=11, ["MMP"]=34, ["MP"]=0, ["TB"]=110, ["SB"]=200, ["AGI"]=22}),
     newPartyMember("BOGO", "paladin", 0, 120,
-    {["MHP"]=122, ["HP"]=107, ["MMP"]=25, ["MP"]=22, ["TB"]=90, ["SB"]=70, ["AGI"]=9})
+    {["MHP"]=122, ["HP"]=107, ["MMP"]=25, ["MP"]=22, ["TB"]=90, ["SB"]=60, ["AGI"]=9})
+}
+partyItems = {
+    {items[1], 4}, {items[2], 2}
 }
 
 battleEncounter = require "battleEncounter"
