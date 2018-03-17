@@ -25,8 +25,8 @@ function createPartyBars()
         local stats = party[i].stats
         memberBars["HP"] = newBar(24*8, (6+((i-1)*9))*8, stats["MHP"], stats["HP"], 7, 0) --HP
         memberBars["MP"] = newBar(24*8, (8+((i-1)*9))*8, stats["MMP"], stats["MP"], 7, 1) --MP
-        memberBars["TB"] = newBar(24*8, (4+((i-1)*9))*8, stats["TB"], 0, 4, 3) --TB
-        memberBars["SB"] = newBar(24*8, (4+((i-1)*9))*8, stats["SB"], 0, 4, 4) --SB
+        memberBars["TB"] = newBar(24*8, (4+((i-1)*9))*8, stats["TB"], 0, 7, 3) --TB
+        memberBars["SB"] = newBar(24*8, (4+((i-1)*9))*8, stats["SB"], 0, 7, 4) --SB
         partyBars[i] = memberBars
     end
 end
@@ -92,7 +92,8 @@ function battle:draw()
         partyBars[i]["HP"]:draw()
         love.graphics.print("MP:"..partyBars[i]["MP"].current, 24*8, (7+yShift)*8)
         partyBars[i]["MP"]:draw()
-        love.graphics.print((partyBars[i]["TB"]:getPercent()+partyBars[i]["SB"]:getPercent()) .."%", 20*8, (4+yShift)*8)
+        love.graphics.print((partyBars[i]["TB"]:getPercent()+partyBars[i]["SB"]:getPercent()), 20*8, (4+yShift)*8)
+        love.graphics.print("%", 23*8, (4+yShift)*8)
         partyBars[i]["TB"]:draw()
         partyBars[i]["SB"]:draw()
     end
