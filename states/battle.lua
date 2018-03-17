@@ -7,6 +7,7 @@ local pointer = {
     [1]=newPointer(19, 6, table.getn(party), 9),
     [2]=newPointer(20, 15, 6, 2),
     [3]=newPointer(19, 15, 7, 2),
+    [5]=newPointer(19, 6, table.getn(party), 9),
     ["current"]=1, ["picked"]=1, ["action"]=1, ["subAction"]=1
 }
 
@@ -159,7 +160,7 @@ function battle:draw()
     end
 
     --Display action menu
-    if pointer.current == 2 then
+    if pointer.current == 2 or pointer.current == 4 then
         commandBox:draw()
         love.graphics.print("ATTACK\n\nSPELL\n\nDEFEND\n\nITEM\n\nCHECK\n\nRUN", 22*8, 15*8)
 
@@ -175,17 +176,9 @@ function battle:draw()
                 love.graphics.print(item.name, 21*8, ((i*2)+13)*8)
                 love.graphics.print("x"..partyItems[i][2], 28*8, ((i*2)+13)*8)
                 
-
-                --love.graphics.print(pointer.current, 0, 100)
-                --love.graphics.print((table.getn(partyItems)), 0, 110)
-                --love.graphics.print(pointer[pointer.current].current.."/", 0, 120)
-                --love.graphics.print(pointer[pointer.current].size, 0, 130)
             end
         elseif pointer.action == 2 then
-            --love.graphics.print("~SPELL~", 20*8, 13*8)
-            --love.graphics.print(pointer.current, 0, 100)
-            --love.graphics.print(pointer[pointer.current].current.."/", 0, 120)
-            --love.graphics.print(pointer[pointer.current].size, 0, 130)
+
         end
     end
 
