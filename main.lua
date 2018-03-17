@@ -8,6 +8,7 @@ party = {
     {["MHP"]=36, ["HP"]=11, ["MMP"]=34, ["MP"]=0, ["TB"]=80, ["SB"]=160, ["AGI"]=22})
 }
 
+battleEncounter = require "battleEncounter"
 pointer = require "pointer"
 menubox = require "menubox"
 bar = require "bar"
@@ -33,7 +34,7 @@ function love.load()
     love.graphics.setBackgroundColor( 166, 166, 166)
 
     Gamestate.registerEvents()
-    Gamestate.switch(battle)
+    Gamestate.switch(battle, newEncounter({[1]=newEnemy("TEST ENEMY", 8, 24, 16, 32, 8, 16)}))
 end
 
 

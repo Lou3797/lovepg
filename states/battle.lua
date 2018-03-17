@@ -1,8 +1,7 @@
 local battle = {}
 local stats = party[1]["stats"]
 local swapTimer = 0.33
-
---local pointer = newPointer(20, 15, 6, 2)
+local currentEncounter = {}
 
 local pointer = {
     [1]=newPointer(18, 6, table.getn(party), 9),
@@ -13,8 +12,9 @@ local pointer = {
 
 local messageBox = newMenuBox(0, 21, 19, 9)
 local tipBox = newMenuBox(0, 0, 32, 3)
-local messageStr = "SORC. BELLWETHER\n\nPREPARES TO\n\nATTACK!"
+local messageStr = ""
 local tipStr = ""
+local tempTipStr = ""
 
 local commandBox = newMenuBox(20, 13, 11, 16)
 local contextBox = newMenuBox(19, 12, 13, 18)
@@ -40,7 +40,7 @@ end
 
 function drawPartyMemberInfo(i, yShift)
     local yShift = yShift or ((i-1)*9)
-    love.graphics.draw(tiles, party[i].picture, 20*8, (5+yShift)*8)
+    love.graphics.draw(tiles, party[i].img, 20*8, (5+yShift)*8)
     love.graphics.print("HP:"..partyBars[i]["HP"].current, 24*8, (5+yShift)*8)
     partyBars[i]["HP"]:draw(24*8, (6+yShift)*8)
     love.graphics.print("MP:"..partyBars[i]["MP"].current, 24*8, (7+yShift)*8)
@@ -56,8 +56,9 @@ function battle:init()
     
 end
 
-function battle:enter()
+function battle:enter(prevState, encounter)
     createPartyBars()
+    currentEncounter = encounter
 end
 
 function battle:resume()
@@ -141,6 +142,8 @@ function battle:draw()
         love.graphics.print("ATTACK\n\nSPELL\n\nDEFEND\n\nITEM\n\nCHECK\n\nRUN", 22*8, 15*8)
 
     end
+
+    messageStr = currentEncounter.enemies[1].name
 
     pointer[pointer.current]:draw()
    
