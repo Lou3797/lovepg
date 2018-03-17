@@ -16,6 +16,7 @@ mainmenu = require "states.mainmenu"
 overworld = require "states.overworld"
 battle = require "states.battle"
 pausemenu = require "states.pausemenu"
+battlepause = require "states.battlepause"
 
 function love.load()
     window = {}

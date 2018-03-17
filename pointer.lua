@@ -32,5 +32,14 @@ function newPointer(xo, yo, items, dy, menuName)
         return pointer.current
     end
 
+    function pointer:reset()
+        pointer.current = 1
+    end
+
+    function pointer:toggle()
+        pointer.isVisible = not pointer.isVisible
+        pointer.isFocused = not pointer.isFocused
+    end
+
     return pointer
 end

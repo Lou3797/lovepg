@@ -14,10 +14,8 @@ bars[3] = fillBarQuads(3)
 bars[4] = fillBarQuads(4)
 bars[5] = fillBarQuads(5)
 
-function newBar(x, y, max, cur, len, row)
+function newBar(max, cur, len, row)
     local bar = {}
-    bar.x = x
-    bar.y = y
     bar.max = max
     bar.current = cur
     bar.length = len or 9
@@ -37,16 +35,16 @@ function newBar(x, y, max, cur, len, row)
         local i=0
         --Draw full bar segments
         while fill-9>=0 do
-            love.graphics.draw(tiles, bars[bar.row][8], bar.x+(i*8), bar.y)
+            love.graphics.draw(tiles, bars[bar.row][8], x+(i*8), y)
             fill = fill-9
             i=i+1
         end
         if fill~=0 then
-            love.graphics.draw(tiles, bars[bar.row][fill], bar.x+(i*8), bar.y)
+            love.graphics.draw(tiles, bars[bar.row][fill], x+(i*8), y)
             i=i+1
         end
         for j=i,bar.length-1 do
-            love.graphics.draw(tiles, bars[bar.row][0], bar.x+(j*8), bar.y)
+            love.graphics.draw(tiles, bars[bar.row][0], x+(j*8), y)
         end
         
     end

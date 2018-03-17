@@ -3,15 +3,22 @@ local stats = party[1]["stats"]
 local swapTimer = 0.33
 
 --local pointer = newPointer(20, 15, 6, 2)
-local pointer = newPointer(18, 6, table.getn(party), 9)
+
+local pointer = {
+    [1]=newPointer(18, 6, table.getn(party), 9),
+    [2]=newPointer(20, 15, 6, 2),
+    [3]=newPointer(19, 6, table.getn(party), 9), 
+    ["current"]=1, ["picked"]=1
+}
 
 local messageBox = newMenuBox(0, 21, 19, 9)
 local tipBox = newMenuBox(0, 0, 32, 3)
 local messageStr = "SORC. BELLWETHER\n\nPREPARES TO\n\nATTACK!"
-local tipStr = "JUDY>NOT READY!"
+local tipStr = ""
 
 local commandBox = newMenuBox(20, 13, 11, 16)
 local contextBox = newMenuBox(19, 12, 13, 18)
+local pickedBox = newMenuBox(19, 3, 13, 9)
 
 local partyBoxes = {}
 for i=0,2 do
@@ -23,12 +30,25 @@ function createPartyBars()
     for i,v in ipairs(party) do 
         local memberBars = {}
         local stats = party[i].stats
-        memberBars["HP"] = newBar(24*8, (6+((i-1)*9))*8, stats["MHP"], stats["HP"], 7, 0) --HP
-        memberBars["MP"] = newBar(24*8, (8+((i-1)*9))*8, stats["MMP"], stats["MP"], 7, 1) --MP
-        memberBars["TB"] = newBar(24*8, (4+((i-1)*9))*8, stats["TB"], 0, 7, 3) --TB
-        memberBars["SB"] = newBar(24*8, (4+((i-1)*9))*8, stats["SB"], 0, 7, 4) --SB
+        memberBars["HP"] = newBar(stats["MHP"], stats["HP"], 7, 0) --HP
+        memberBars["MP"] = newBar(stats["MMP"], stats["MP"], 7, 1) --MP
+        memberBars["TB"] = newBar(stats["TB"], 0, 7, 3) --TB
+        memberBars["SB"] = newBar(stats["SB"], 0, 7, 4) --SB
         partyBars[i] = memberBars
     end
+end
+
+function drawPartyMemberInfo(i, yShift)
+    local yShift = yShift or ((i-1)*9)
+    love.graphics.draw(tiles, party[i].picture, 20*8, (5+yShift)*8)
+    love.graphics.print("HP:"..partyBars[i]["HP"].current, 24*8, (5+yShift)*8)
+    partyBars[i]["HP"]:draw(24*8, (6+yShift)*8)
+    love.graphics.print("MP:"..partyBars[i]["MP"].current, 24*8, (7+yShift)*8)
+    partyBars[i]["MP"]:draw(24*8, (8+yShift)*8)
+    love.graphics.print((partyBars[i]["TB"]:getPercent()+partyBars[i]["SB"]:getPercent()), 20*8, (4+yShift)*8)
+    love.graphics.print("%", 23*8, (4+yShift)*8)
+    partyBars[i]["TB"]:draw(24*8, (4+yShift)*8)
+    partyBars[i]["SB"]:draw(24*8, (4+yShift)*8)
 end
 
 
@@ -86,16 +106,7 @@ function battle:draw()
     end
     --Draw party info
     for i,v in ipairs(partyBars) do
-        local yShift = (i-1)*9
-        love.graphics.draw(tiles, party[i].picture, 20*8, (5+yShift)*8)
-        love.graphics.print("HP:"..partyBars[i]["HP"].current, 24*8, (5+yShift)*8)
-        partyBars[i]["HP"]:draw()
-        love.graphics.print("MP:"..partyBars[i]["MP"].current, 24*8, (7+yShift)*8)
-        partyBars[i]["MP"]:draw()
-        love.graphics.print((partyBars[i]["TB"]:getPercent()+partyBars[i]["SB"]:getPercent()), 20*8, (4+yShift)*8)
-        love.graphics.print("%", 23*8, (4+yShift)*8)
-        partyBars[i]["TB"]:draw()
-        partyBars[i]["SB"]:draw()
+        drawPartyMemberInfo(i)
     end
 
     love.graphics.print(tipStr, 8, 8)
@@ -104,23 +115,46 @@ function battle:draw()
     --love.graphics.print("+AGI", 21*8, 9*8)
     --love.graphics.print("+LCK", 26*8, 9*8)
 
-    --commandBox:draw()
-    --love.graphics.print("ATTACK\n\nSPELL\n\nDEFEND\n\nITEM\n\nCHECK\n\nRUN", 22*8, 15*8)
     --contextBox:draw()
     --love.graphics.print("~SPELLS~", 20*8, 13*8)
     --love.graphics.print("QUICK DRAW\n\nROYAL SHLD", 21*8, 15*8)
 
-    pointer:draw()
+    --Display action menu
+    if pointer.current == 2 then
+        pickedBox:draw()
+        drawPartyMemberInfo(pointer.picked, 0)
+        commandBox:draw()
+        love.graphics.print("ATTACK\n\nSPELL\n\nDEFEND\n\nITEM\n\nCHECK\n\nRUN", 22*8, 15*8)
+
+    end
+
+    pointer[pointer.current]:draw()
    
 end
 
 function battle:keypressed(key)
     if key == 'up' then
-        pointer:moveUp()
+        pointer[pointer.current]:moveUp()
+    elseif key == 'down' then
+        pointer[pointer.current]:moveDown()
+    elseif key == 'z' then
+        if pointer.current == 1 then
+            pointer.picked = pointer[pointer.current]:select()
+            pointer.current = 2
+        elseif pointer.current == 2 then
+
+        end
+    elseif key == 'x' then
+        if pointer.current == 2 then
+            pointer[pointer.current]:reset()
+            pointer.current = 1
+        end
+
+
+    elseif key == 'return' then
+        Gamestate.push(battlepause)
     end
-    if key == 'down' then
-        pointer:moveDown()
-    end
+
     --[[
     if key == 'right' then
         party[2]:changeStat("MP", 5)
