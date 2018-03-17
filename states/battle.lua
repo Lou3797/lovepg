@@ -92,6 +92,20 @@ function battle:update(dt)
             swapTimer = 0.33
         end
     end
+
+    --Update tooltip
+    local curPoint = pointer[pointer.current]
+    if pointer.current == 1 then
+        local curSelect = curPoint:select()
+        if partyBars[curSelect]["TB"].getPercent() < 100 then
+            tipStr = "NOT READY!"
+        else 
+            tipStr = "READY!"
+        end
+    elseif pointer.current == 2 then
+        tipStr = party[pointer.picked].name
+    end
+
 end
 
 function battle:draw()
@@ -139,8 +153,13 @@ function battle:keypressed(key)
         pointer[pointer.current]:moveDown()
     elseif key == 'z' then
         if pointer.current == 1 then
-            pointer.picked = pointer[pointer.current]:select()
-            pointer.current = 2
+            if partyBars[pointer[pointer.current]:select()]["TB"].getPercent() < 100 then
+
+            else
+                pointer.picked = pointer[pointer.current]:select()
+                pointer.current = 2
+            end
+            
         elseif pointer.current == 2 then
 
         end
