@@ -25,8 +25,8 @@ function createPartyBars()
         local stats = party[i].stats
         memberBars["HP"] = newBar(24*8, (6+((i-1)*9))*8, stats["MHP"], stats["HP"], 7, 0) --HP
         memberBars["MP"] = newBar(24*8, (8+((i-1)*9))*8, stats["MMP"], stats["MP"], 7, 1) --MP
-        memberBars["TB"] = newBar(24*8, (4+((i-1)*9))*8, 100, 0, 7, 3) --Timer
-        memberBars["SB"] = newBar(24*8, (4+((i-1)*9))*8, 100, 0, 7, 4) --Special
+        memberBars["TB"] = newBar(24*8, (4+((i-1)*9))*8, stats["TB"], 0, 7, 3) --TB
+        memberBars["SB"] = newBar(24*8, (4+((i-1)*9))*8, stats["SB"], 0, 7, 4) --SB
         partyBars[i] = memberBars
     end
 end
@@ -49,23 +49,25 @@ function battle:leave()
 end
 
 function battle:update(dt)
-    if partyBars[1]["TB"].current+(dt*8.5) < partyBars[1]["TB"].max then
-        partyBars[1]["TB"]:update(partyBars[1]["TB"].current+(dt*8.5))
-    else
-        tipStr = "JUDY>READY!"
-        swapTimer = swapTimer-dt
-        if swapTimer <= 0 then
-            partyBars[1]["SB"]:swapRow()
-            swapTimer = 0.33
-        end
-        partyBars[1]["TB"]:update(100)
-        if partyBars[1]["SB"].current+(dt*4.5) < partyBars[1]["SB"].max then
-            partyBars[1]["SB"]:update(partyBars[1]["SB"].current+(dt*4.5))
+    for i,v in ipairs(party) do
+        local timeFactor = 8
+        local specialFactor = 4.5
+        if partyBars[i]["TB"].current+(dt*timeFactor) < partyBars[i]["TB"].max then
+            partyBars[i]["TB"]:update(partyBars[i]["TB"].current+(dt*timeFactor))
         else
-            partyBars[1]["SB"]:update(100)
+            swapTimer = swapTimer-dt
+            if swapTimer <= 0 then
+                partyBars[i]["SB"]:swapRow()
+                swapTimer = 0.33
+            end
+            partyBars[i]["TB"]:update(partyBars[i]["TB"].max)
+            if partyBars[i]["SB"].current+(dt*specialFactor) < partyBars[i]["SB"].max then
+                partyBars[i]["SB"]:update(partyBars[i]["SB"].current+(dt*specialFactor))
+            else
+                partyBars[i]["SB"]:update(partyBars[i]["SB"].max)
+            end
         end
-    end
-    
+    end 
 end
 
 function battle:draw()
@@ -91,13 +93,11 @@ function battle:draw()
         partyBars[i]["SB"]:draw()
     end
 
-    --love.graphics.print("SORC. BELLWETHER", 8, 8)
-    --love.graphics.print(party[1]["stats"]["MHP"], 8,8)
     love.graphics.print(tipStr, 8, 8)
     love.graphics.print(messageStr, 8, 22*8)
     --love.graphics.print("~POULTICE~\n\n+10% AGI\n\nTO SELF", 19*8, 20*8)
-    love.graphics.print("+AGI", 21*8, 9*8)
-    love.graphics.print("+LCK", 26*8, 9*8)
+    --love.graphics.print("+AGI", 21*8, 9*8)
+    --love.graphics.print("+LCK", 26*8, 9*8)
 
     --commandBox:draw()
     --love.graphics.print("ATTACK\n\nSPELL\n\nDEFEND\n\nITEM\n\nCHECK\n\nRUN", 22*8, 15*8)

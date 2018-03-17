@@ -3,11 +3,10 @@ tiles = love.graphics.newImage("img/tiles.png")
 partymember = require "partymember"
 party = {
     newPartyMember("JUDY", "knight", 0, 56,
-    {["MHP"]=70, ["HP"]=19, ["MMP"]=16, ["MP"]=3, ["AGI"]=14}), 
+    {["MHP"]=70, ["HP"]=19, ["MMP"]=16, ["MP"]=3, ["TB"]=100, ["SB"]=75, ["AGI"]=14}), 
     newPartyMember("NICK", "rogue", 0, 88,
-    {["MHP"]=36, ["HP"]=11, ["MMP"]=34, ["MP"]=0, ["AGI"]=22})
+    {["MHP"]=36, ["HP"]=11, ["MMP"]=34, ["MP"]=0, ["TB"]=80, ["SB"]=160, ["AGI"]=22})
 }
-test = 100
 
 pointer = require "pointer"
 menubox = require "menubox"

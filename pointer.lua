@@ -1,4 +1,4 @@
-function newPointer(xo, yo, items, dy)
+function newPointer(xo, yo, items, dy, menuName)
     local pointer = {}
 
     pointer.quad = love.graphics.newQuad(8, 24, 16, 16, tiles:getDimensions())
