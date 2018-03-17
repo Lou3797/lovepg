@@ -14,7 +14,7 @@ bars[3] = fillBarQuads(3)
 bars[4] = fillBarQuads(4)
 bars[5] = fillBarQuads(5)
 
-function newBar(x, y, max, cur, len, row, name)
+function newBar(x, y, max, cur, len, row)
     local bar = {}
     bar.x = x
     bar.y = y
@@ -22,7 +22,6 @@ function newBar(x, y, max, cur, len, row, name)
     bar.current = cur
     bar.length = len or 9
     bar.row = row or 0
-    bar.name = name or "?P:"
 
     function bar:update(cur, max)
         bar.current = cur

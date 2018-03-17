@@ -60,7 +60,7 @@ function battle:update(dt)
         end
         partyBars[1]["TB"]:update(100)
         if partyBars[1]["SB"].current+(dt*4.5) < partyBars[1]["SB"].max then
-            partyBars[1]["SB"]:update(partyBars[1][4].current+(dt*4.5))
+            partyBars[1]["SB"]:update(partyBars[1]["SB"].current+(dt*4.5))
         else
             partyBars[1]["SB"]:update(100)
         end
