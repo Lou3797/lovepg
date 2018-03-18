@@ -1,6 +1,6 @@
 local classes = {}
-classes["knight"] = {}
-classes["rogue"] =  {}
+classes["KNIGHT"] = {}
+classes["ROGUE"] =  {}
 
 function newPartyMember(name, class, imgX, imgY, stats, moveset)
     local member = {}

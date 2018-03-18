@@ -5,7 +5,7 @@ function overworld:init()
 end
 
 function overworld:enter()
-
+    
 end
 
 function overworld:resume()
@@ -21,12 +21,14 @@ function overworld:update(dt)
 end
 
 function overworld:draw()
-    love.graphics.setColor(200, 80, 150, 255)
+    love.graphics.setBackgroundColor(50, 50, 50)
+    love.graphics.setColor(255, 255, 255)
     love.graphics.print("THIS IS A TEST OF MY CUSTOM\n\nNES-STYLED FONT.\n\n"..
     "HOPEFULLY IT LOOKS GOOD!\n\n"..
     "COST 3 MP\n\n" ..
     "REGAINS MP BY ATTACKING.\n\n" ..
     "40 / 69 HP", 8, 8)
+    
 end
 
 function overworld:keypressed(key)

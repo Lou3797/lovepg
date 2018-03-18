@@ -177,6 +177,7 @@ function battle:draw()
                 love.graphics.print("x"..partyItems[i][2], 28*8, ((i*2)+13)*8)
                 
             end
+            love.graphics.print("1234567890", 21*8, (25)*8)
         elseif pointer.action == 2 then
 
         end
