@@ -9,6 +9,17 @@ menuQuads.bl = love.graphics.newQuad(0, 16, 8, 8, tiles:getDimensions())
 menuQuads.bc = love.graphics.newQuad(8, 16, 8, 8, tiles:getDimensions())
 menuQuads.br = love.graphics.newQuad(16, 16, 8, 8, tiles:getDimensions())
 
+function newMenuItem(string, windowStack, execute, objectRef)
+    local item = {}
+
+    item.string = string
+    item.stack = windowStack
+    item.execute = execute
+    item.objectRef = objectRef
+
+    return item
+end
+
 function newListPointer(x, y, yo, length, dy)
     local pointer = {}
 
@@ -107,15 +118,24 @@ function newListWindow(x, y, w, h, list, xo, yo, name)
     popup.xo = xo
     popup.yo = yo
     popup.name = name
-    popup.pointer = newListPointer(x, y, yo, table.getn(list), 2)
+    popup.pointer = newListPointer(x, y, yo, #list, 2)
     popup.window = newWindow(x, y, w, h)
 
     function popup:setList(list)
         popup.list = list
     end
 
-    function popup:select()
+    function popup:getCurrentMenuItem(n)
         return popup.list[popup.pointer.current]
+    end
+
+    function popup:execute(param)
+        local currentMenuItem = popup:getCurrentMenuItem()
+        if param == nil then
+            return currentMenuItem:execute(currentMenuItem) or "NO_PARAM+RETURN"
+        else
+            return currentMenuItem:execute(param) or "NO_RETURN"
+        end
     end
 
     function popup:reset()
@@ -139,7 +159,7 @@ function newListWindow(x, y, w, h, list, xo, yo, name)
 
         --PRINTING THE LIST
         for i,v in ipairs(popup.list) do
-            love.graphics.print(popup.list[i], (1+popup.x+popup.xo)*8, (1+((i-1)*2)+popup.y+popup.yo)*8)
+            love.graphics.print(popup.list[i].string, (1+popup.x+popup.xo)*8, (1+((i-1)*2)+popup.y+popup.yo)*8)
         end
 
         --DRAWING THE CURSOR

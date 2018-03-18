@@ -16,6 +16,7 @@ partyItems = {
 
 battleEncounter = require "battleEncounter"
 pointer = require "ui.pointer"
+menusystem = require "ui.menusystem"
 menubox = require "ui.menubox"
 window = require "ui.window"
 bar = require "ui.bar"

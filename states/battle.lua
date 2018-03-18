@@ -4,10 +4,10 @@ local swapTimer = 0.33
 local currentEncounter = {}
 
 local pointer = {
-    [1]=newPointer(19, 6, table.getn(party), 9),
+    [1]=newPointer(19, 6, #party, 9),
     [2]=newPointer(20, 15, 6, 2),
     [3]=newPointer(19, 15, 7, 2),
-    [5]=newPointer(19, 6, table.getn(party), 9),
+    [5]=newPointer(19, 6, #party, 9),
     ["current"]=1, ["picked"]=1, ["action"]=1, ["subAction"]=1
 }
 
@@ -208,9 +208,9 @@ function battle:keypressed(key)
             pointer.action = pointer[pointer.current].current
             if pointer.action == 4 then
                 pointer.current = 3
-                pointer[pointer.current]:changeSize(table.getn(partyItems))
+                pointer[pointer.current]:changeSize(#partyItems)
             elseif pointer.action == 2 then
-                --pointer[pointer.current]:changeSize(table.getn(partyItems))
+                --pointer[pointer.current]:changeSize(#partyItems)
                 pointer.current = 3
             elseif pointer.action == 1 or pointer.action == 5 then
                 pointer.current = 4

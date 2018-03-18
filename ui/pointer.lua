@@ -46,7 +46,7 @@ function newPointer(xo, yo, items, dy, menuName)
 end
 
 function newEncounterPointer(encounter)
-    local pointer = newPointer(0, 0, table.getn(encounter.enemies), 1)
+    local pointer = newPointer(0, 0, #encounter.enemies, 1)
     pointer.encounter = encounter
     
     function pointer:moveLeft()
