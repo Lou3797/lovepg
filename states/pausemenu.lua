@@ -12,10 +12,6 @@ local pauseWindows = {
     --newWindow(0, 3, 13, 18)
 }
 
-function test()
-    return "TESTING THIS MENU ITEM"
-end
-
 function pausemenu:init()
 
 end
@@ -23,7 +19,7 @@ end
 function pausemenu:enter()
     love.graphics.setBackgroundColor(0, 0, 0)
     love.graphics.setColor(255, 255, 255)
-    --table.insert(winodwStack, newListWindow(1, 4, 11, 16, {"SPELL","ITEM","EQUIP","STATUS"}, 1, 1))
+
     table.insert(winodwStack, newListWindow(1, 4, 11, 16,
     {
         newMenuItem("SPELL", winodwStack, test),
@@ -72,9 +68,7 @@ function pausemenu:keypressed(key)
     elseif key == 'up' then
         currentWindow:moveUp()
     elseif key == 'z' then
-        --currentWindow:execute()
         headerStr = currentWindow:execute()
-        --table.insert(winodwStack, newListWindow(0, 3, 13, 18, {"LOLWAT"}, 1, 1))
     end
 end
 

@@ -125,17 +125,24 @@ function newListWindow(x, y, w, h, list, xo, yo, name)
         popup.list = list
     end
 
-    function popup:getCurrentMenuItem(n)
+    function popup:getCurrentMenuItem()
         return popup.list[popup.pointer.current]
     end
 
-    function popup:execute(param)
+    function popup:execute(...)
+        local arg = {...}
         local currentMenuItem = popup:getCurrentMenuItem()
-        if param == nil then
-            return currentMenuItem:execute(currentMenuItem) or "NO_PARAM+RETURN"
+        return currentMenuItem:execute(currentMenuItem, ...)
+        --[[
+        if #arg == 0 then
+            return "NO_ARG"
+            --return currentMenuItem:execute(currentMenuItem) or "NO_PARAM+RETURN"
         else
-            return currentMenuItem:execute(param) or "NO_RETURN"
+            return "YES_ARG"
+            --return currentMenuItem:execute(...) or "NO_RETURN"
         end
+        ]]--
+        
     end
 
     function popup:reset()
