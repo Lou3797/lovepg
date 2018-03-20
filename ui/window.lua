@@ -9,10 +9,11 @@ menuQuads.bl = love.graphics.newQuad(0, 16, 8, 8, tiles:getDimensions())
 menuQuads.bc = love.graphics.newQuad(8, 16, 8, 8, tiles:getDimensions())
 menuQuads.br = love.graphics.newQuad(16, 16, 8, 8, tiles:getDimensions())
 
-function newMenuItem(string, windowStack, execute, objectRef)
+function newMenuItem(string, desc, windowStack, execute, objectRef)
     local item = {}
 
     item.string = string
+    item.desc = desc
     item.stack = windowStack
     item.execute = execute
     item.objectRef = objectRef
@@ -37,13 +38,17 @@ function newListPointer(x, y, yo, length, dy)
     function pointer:moveDown()
         if pointer.isFocused and pointer.current+1 <= pointer.length then
             pointer.current = pointer.current+1
+            return true
         end
+        return false
     end
 
     function pointer:moveUp()
         if pointer.isFocused and pointer.current-1 > 0 then
             pointer.current = pointer.current-1
+            return true
         end
+        return false
     end
 
     function pointer:reset()
@@ -64,9 +69,9 @@ function newListPointer(x, y, yo, length, dy)
 
     end
 
-    function pointer:draw()
+    function pointer:draw(viewShift)
         if pointer.isVisible then
-            love.graphics.draw(tiles, pointer.quad, (pointer.x)*8, ((1+pointer.y+pointer.yo)+(dy*(pointer.current-1)))*8)
+            love.graphics.draw(tiles, pointer.quad, (pointer.x)*8, ((1+pointer.y+pointer.yo)+(pointer.dy*(pointer.current-1-viewShift)))*8)
         end
     end
 
@@ -106,6 +111,15 @@ function newWindow(x, y, w, h)
     return menubox
 end
 
+function adjustForName(yo, name)
+    if name == nil then return yo
+    else return yo+1, name end
+end
+
+function calculateDisplaySize(h, yo)
+    return math.floor((h-2-yo)/2)
+end
+
 function newListWindow(x, y, w, h, list, xo, yo, name)
     local popup = {}
 
@@ -114,12 +128,15 @@ function newListWindow(x, y, w, h, list, xo, yo, name)
     popup.w = w
     popup.h = h
     popup.list = list
-    popup.cursorOnly = cursorOnly
+    --popup.cursorOnly = cursorOnly
     popup.xo = xo
-    popup.yo = yo
-    popup.name = name
-    popup.pointer = newListPointer(x, y, yo, #list, 2)
+    --popup.yo = yo
+    popup.yo, popup.name = adjustForName(yo, name)
+    popup.pointer = newListPointer(x, y, popup.yo, #list, 2)
     popup.window = newWindow(x, y, w, h)
+    popup.viewShift = 0
+    popup.viewSize = calculateDisplaySize(popup.h, popup.yo)
+    --popup.isScrolling = #popup.list > popup.viewSize
 
     function popup:setList(list)
         popup.list = list
@@ -150,11 +167,20 @@ function newListWindow(x, y, w, h, list, xo, yo, name)
     end
 
     function popup:moveDown()
-        popup.pointer:moveDown()
+        if popup.pointer:moveDown() then
+            if popup.pointer.current - popup.viewShift > popup.viewSize then
+                popup.viewShift = popup.viewShift+1
+            end
+        end
     end
 
     function popup:moveUp()
-        popup.pointer:moveUp()
+        if popup.pointer:moveUp() then
+            if popup.pointer.current <= popup.viewShift then
+                popup.viewShift = popup.viewShift-1
+            end
+        end
+       
     end
 
     function popup:update(dt)
@@ -164,13 +190,46 @@ function newListWindow(x, y, w, h, list, xo, yo, name)
     function popup:draw()
         popup.window:draw()
 
-        --PRINTING THE LIST
-        for i,v in ipairs(popup.list) do
-            love.graphics.print(popup.list[i].string, (1+popup.x+popup.xo)*8, (1+((i-1)*2)+popup.y+popup.yo)*8)
+        --PRINTING THE LIST NAME
+        if popup.name ~= nil then
+            love.graphics.print("~"..popup.name.."~", (x+xo)*8, (y+yo)*8)
+        end
+
+        --PRINTING THE LIST ITEMS
+        --[[
+        if not popup.isScrolling then
+            for i,v in ipairs(popup.list) do
+                love.graphics.print(popup.list[i].string, (1+popup.x+popup.xo)*8, (1+((i-1)*2)+popup.y+popup.yo)*8)
+            end
+        else
+            local limit = popup.viewShift+popup.viewSize
+            if limit > #popup.list then
+                limit = #popup.list
+            end
+            for i=1+popup.viewShift,limit do
+                love.graphics.print(popup.list[i].string, (1+popup.x+popup.xo)*8, (1+((i-1)*2)+popup.y+popup.yo-(popup.viewShift*2))*8)
+            end
+        end
+        ]]--
+        local limit = popup.viewShift+popup.viewSize
+        if limit > #popup.list then
+            limit = #popup.list
+        end
+        for i=1+popup.viewShift,limit do
+            love.graphics.print(popup.list[i].string, (1+popup.x+popup.xo)*8, (1+((i-1)*2)+popup.y+popup.yo-(popup.viewShift*2))*8)
         end
 
         --DRAWING THE CURSOR
-        popup.pointer:draw()
+        popup.pointer:draw(popup.viewShift)
+
+        --DRAW LIST ARROWS
+        if popup.viewShift > 0 then
+            love.graphics.print("^", (popup.x+popup.w-2)*8, (popup.y+popup.yo)*8)
+        end
+        if popup.viewShift + popup.viewSize < #popup.list then
+            love.graphics.print("v", (popup.x+popup.w-2)*8, (popup.y+popup.h-2)*8)
+        end
+
     end
 
     return popup

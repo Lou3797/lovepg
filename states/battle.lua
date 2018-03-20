@@ -33,7 +33,7 @@ function createPartyBars()
         local stats = party[i].stats
         memberBars["HP"] = newBar(stats["MHP"], stats["HP"], 7, 0) --HP
         memberBars["MP"] = newBar(stats["MMP"], stats["MP"], 7, 1) --MP
-        memberBars["TB"] = newBar(stats["TB"], 100, 7, 3) --TB
+        memberBars["TB"] = newBar(stats["TB"], 0, 7, 3) --TB
         memberBars["SB"] = newBar(stats["SB"], 0, 7, 4) --SB
         partyBars[i] = memberBars
     end

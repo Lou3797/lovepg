@@ -1,3 +1,5 @@
+local scale = 3
+love.graphics.setDefaultFilter("nearest", "nearest", 1)
 tiles = love.graphics.newImage("img/tiles.png")
 
 partymember = require "partymember"
@@ -32,11 +34,11 @@ function love.load()
     window.width = 256
     window.height = 240
     love.window.setMode(window.width, window.height, 
-    {resizable=true, vsync=true, minwidth=window.width, minheight=window.height})
+    {resizable=false, vsync=true, minwidth=window.width*scale, minheight=window.height*scale})
     love.window.setTitle("ZC:tNHS")
-
+    
     font = love.graphics.newImageFont("img/font.png", 
-    " ABCDEFGHIJKLMNOPQRSTUVWXYZ,.:;!?[]-+/%\"\'1234567890=_~`*>()xw")
+    " ABCDEFGHIJKLMNOPQRSTUVWXYZ,.:;!?[]-+/%\"\'1234567890=_~`*>()x^v<")
     love.graphics.setFont(font)
 
     love.graphics.setBackgroundColor( 166, 166, 166)
@@ -55,11 +57,11 @@ end
 
 
 function love.update(dt)
-
+    
 end
 
 function love.draw()
-    
+    love.graphics.scale(scale)
 end
 
 

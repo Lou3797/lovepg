@@ -2,6 +2,7 @@ local pausemenu = {}
 
 local winodwStack = {}
 local headerStr = ""
+local headerTempStr = ""
 local pauseWindows = {
     newWindow(0, 0, 32, 3),
     --newWindow(0, 21, 13, 9),
@@ -22,11 +23,11 @@ function pausemenu:enter()
 
     table.insert(winodwStack, newListWindow(1, 4, 11, 16,
     {
-        newMenuItem("SPELL", winodwStack, test),
-        newMenuItem("ITEM", winodwStack, openItemWindow),
-        newMenuItem("EQUIP", winodwStack, test),
-        newMenuItem("STATUS", winodwStack, test),
-        newMenuItem("PARTY", winodwStack, test)
+        newMenuItem("ITEM", "USE/CHECK AN ITEM", winodwStack, openItemWindow),
+        newMenuItem("SPELL", "USE/CHECK A SPELL", winodwStack, tempSpells),
+        newMenuItem("EQUIP", "", winodwStack, test),
+        newMenuItem("STATUS", "CHECK PARTY STATUS", winodwStack, test),
+        newMenuItem("PARTY", "", winodwStack, test)
     }, 1, 1))
 end
 
@@ -37,12 +38,15 @@ end
 function pausemenu:leave()
     winodwStack = {}
     headerStr = ""
+    headerTempStr = ""
 end
 
 function pausemenu:update(dt)
     if #winodwStack == 0 then
         return Gamestate.pop()
     end
+
+    headerStr = winodwStack[#winodwStack]:getCurrentMenuItem().desc
 
 end
 
@@ -54,7 +58,7 @@ function pausemenu:draw()
         winodwStack[i]:draw()
     end
 
-    love.graphics.print(headerStr, 8, 8)
+    love.graphics.print(headerStr..headerTempStr, 8, 8)
 end
 
 function pausemenu:keypressed(key)
@@ -68,7 +72,8 @@ function pausemenu:keypressed(key)
     elseif key == 'up' then
         currentWindow:moveUp()
     elseif key == 'z' then
-        headerStr = currentWindow:execute()
+        currentWindow:execute()
+        --headerStr = currentWindow:execute()
     end
 end
 

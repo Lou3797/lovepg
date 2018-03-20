@@ -36,7 +36,12 @@ function overworld:keypressed(key)
         Gamestate.push(pausemenu)
     end
     if key == 'b' then
-        Gamestate.push(battle)
+        Gamestate.push(battle,
+        newEncounter({
+        newEnemy("TEST1", 3, 8, 0, 40, 32, 32), 
+        newEnemy("TEST2", 8, 8, 0, 72, 32, 32), 
+        newEnemy("TEST3", 13, 8, 0, 104, 32, 32)
+    }))
     end
 end
 
