@@ -65,8 +65,16 @@ function newListPointer(x, y, yo, length, dy)
         pointer.size = len
     end
 
-    function pointer:update(dt)
+    function pointer:setVisible(bool)
+        pointer.isVisible = bool
+    end
 
+    function pointer:update(dt)
+        pointer.timer = pointer.timer-dt
+        if pointer.timer <= 0 then
+            pointer.timer = 0.25
+            pointer.isVisible = not pointer.isVisible
+        end
     end
 
     function pointer:draw(viewShift)
@@ -196,21 +204,6 @@ function newListWindow(x, y, w, h, list, xo, yo, name)
         end
 
         --PRINTING THE LIST ITEMS
-        --[[
-        if not popup.isScrolling then
-            for i,v in ipairs(popup.list) do
-                love.graphics.print(popup.list[i].string, (1+popup.x+popup.xo)*8, (1+((i-1)*2)+popup.y+popup.yo)*8)
-            end
-        else
-            local limit = popup.viewShift+popup.viewSize
-            if limit > #popup.list then
-                limit = #popup.list
-            end
-            for i=1+popup.viewShift,limit do
-                love.graphics.print(popup.list[i].string, (1+popup.x+popup.xo)*8, (1+((i-1)*2)+popup.y+popup.yo-(popup.viewShift*2))*8)
-            end
-        end
-        ]]--
         local limit = popup.viewShift+popup.viewSize
         if limit > #popup.list then
             limit = #popup.list
@@ -225,9 +218,11 @@ function newListWindow(x, y, w, h, list, xo, yo, name)
         --DRAW LIST ARROWS
         if popup.viewShift > 0 then
             love.graphics.print("^", (popup.x+popup.w-2)*8, (popup.y+popup.yo)*8)
+            --love.graphics.print("^", (popup.x+2)*8, (popup.y+popup.yo)*8)
         end
         if popup.viewShift + popup.viewSize < #popup.list then
             love.graphics.print("v", (popup.x+popup.w-2)*8, (popup.y+popup.h-2)*8)
+            --love.graphics.print("v", (popup.x+2)*8, (popup.y+popup.h-2)*8)
         end
 
     end

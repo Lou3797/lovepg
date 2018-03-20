@@ -2,15 +2,16 @@ local scale = 3
 love.graphics.setDefaultFilter("nearest", "nearest", 1)
 tiles = love.graphics.newImage("img/tiles.png")
 
+bar = require "ui.bar"
 partymember = require "partymember"
 item = require "item"
 party = {
-    newPartyMember("JUDY", "KNIGHT", 0, 56,
-    {["MHP"]=70, ["HP"]=19, ["MMP"]=16, ["MP"]=3, ["TB"]=95, ["SB"]=75, ["AGI"]=15}), 
-    newPartyMember("NICK", "ROGUE", 0, 88,
-    {["MHP"]=36, ["HP"]=11, ["MMP"]=34, ["MP"]=0, ["TB"]=110, ["SB"]=200, ["AGI"]=22})--[[,
-    newPartyMember("BOGO", "ENFORCER", 0, 120,
-    {["MHP"]=122, ["HP"]=107, ["MMP"]=25, ["MP"]=22, ["TB"]=90, ["SB"]=60, ["AGI"]=9})]]--
+    newPartyMember("JUDY", "KNIGHT", 0, 56, 0, 19*8,
+    {["LV"]=12, ["MHP"]=70, ["HP"]=19, ["MMP"]=16, ["MP"]=3, ["TB"]=95, ["SB"]=75, ["AGI"]=15}), 
+    newPartyMember("NICK", "ROGUE", 0, 88, 48, 19*8,
+    {["LV"]=10, ["MHP"]=36, ["HP"]=11, ["MMP"]=34, ["MP"]=0, ["TB"]=110, ["SB"]=200, ["AGI"]=22})--[[,
+    newPartyMember("BOGO", "ENFORCER", 0, 120, 96, 19*8,
+    {["LV"]=15, ["MHP"]=122, ["HP"]=107, ["MMP"]=25, ["MP"]=22, ["TB"]=90, ["SB"]=60, ["AGI"]=9})]]--
 }
 partyItems = {
     {items[1], 4}, {items[2], 2}, {items[4], 1}
@@ -21,7 +22,6 @@ pointer = require "ui.pointer"
 menusystem = require "ui.menusystem"
 menubox = require "ui.menubox"
 window = require "ui.window"
-bar = require "ui.bar"
 Gamestate = require "libs.gamestate"
 mainmenu = require "states.mainmenu"
 overworld = require "states.overworld"

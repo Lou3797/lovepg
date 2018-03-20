@@ -42,7 +42,8 @@ function tempSpells(menuItem, ...)
         newMenuItem("ITEM6", "ITEM6", menuItem.stack, test),
         newMenuItem("ITEM7", "ITEM7", menuItem.stack, test),
         newMenuItem("ITEM8", "ITEM8", menuItem.stack, test),
-        newMenuItem("ITEM9", "ITEM9", menuItem.stack, test)
+        newMenuItem("ITEM9", "ITEM9", menuItem.stack, test),
+        newMenuItem("ITEM0", "ITEM0", menuItem.stack, test)
     }, 1, 1, menuItem.string))
 
 end

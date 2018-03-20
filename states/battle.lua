@@ -3,6 +3,8 @@ local stats = party[1]["stats"]
 local swapTimer = 0.33
 local currentEncounter = {}
 
+local partyBars = {}
+
 local pointer = {
     [1]=newPointer(19, 6, #party, 9),
     [2]=newPointer(20, 15, 6, 2),
@@ -26,32 +28,6 @@ for i=0,2 do
     partyBoxes[i+1] = newMenuBox(19, 3+(i*9), 13, 9)
 end
 
-partyBars = {}
-function createPartyBars()
-    for i,v in ipairs(party) do 
-        local memberBars = {}
-        local stats = party[i].stats
-        memberBars["HP"] = newBar(stats["MHP"], stats["HP"], 7, 0) --HP
-        memberBars["MP"] = newBar(stats["MMP"], stats["MP"], 7, 1) --MP
-        memberBars["TB"] = newBar(stats["TB"], 0, 7, 3) --TB
-        memberBars["SB"] = newBar(stats["SB"], 0, 7, 4) --SB
-        partyBars[i] = memberBars
-    end
-end
-
-function drawPartyMemberInfo(i, yShift)
-    local yShift = yShift or ((i-1)*9)
-    love.graphics.draw(tiles, party[i].img, 20*8, (5+yShift)*8)
-    love.graphics.print("HP:"..partyBars[i]["HP"].current, 24*8, (5+yShift)*8)
-    partyBars[i]["HP"]:draw(24*8, (6+yShift)*8)
-    love.graphics.print("MP:"..partyBars[i]["MP"].current, 24*8, (7+yShift)*8)
-    partyBars[i]["MP"]:draw(24*8, (8+yShift)*8)
-    love.graphics.print((partyBars[i]["TB"]:getPercent()+partyBars[i]["SB"]:getPercent()), 20*8, (4+yShift)*8)
-    love.graphics.print("%", 23*8, (4+yShift)*8)
-    partyBars[i]["TB"]:draw(24*8, (4+yShift)*8)
-    partyBars[i]["SB"]:draw(24*8, (4+yShift)*8)
-end
-
 function executeCommand()
 
 end
@@ -61,7 +37,7 @@ function battle:init()
 end
 
 function battle:enter(prevState, encounter)
-    createPartyBars()
+    partyBars = createPartyBars()
     currentEncounter = encounter
     pointer[4]=newEncounterPointer(encounter)
 end
@@ -142,8 +118,8 @@ function battle:draw()
         partyBoxes[i]:draw()
     end
     --Draw party info
-    for i,v in ipairs(partyBars) do
-        drawPartyMemberInfo(i)
+    for i,v in ipairs(party) do
+        drawPartyMemberInfo(partyBars, i)
     end
 
     love.graphics.print(tipStr..tempTipStr, 8, 8)
@@ -156,7 +132,7 @@ function battle:draw()
 
     if pointer.current ~= 1 then
         pickedBox:draw()
-        drawPartyMemberInfo(pointer.picked, 0)
+        drawPartyMemberInfo(partyBars, pointer.picked, 0)
     end
 
     --Display action menu
