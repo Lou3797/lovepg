@@ -9,6 +9,15 @@ menuQuads.bl = love.graphics.newQuad(0, 16, 8, 8, tiles:getDimensions())
 menuQuads.bc = love.graphics.newQuad(8, 16, 8, 8, tiles:getDimensions())
 menuQuads.br = love.graphics.newQuad(16, 16, 8, 8, tiles:getDimensions())
 
+function adjustForName(yo, name)
+    if name == nil then return yo
+    else return yo+1, name end
+end
+
+function calculateDisplaySize(h, yo)
+    return math.floor((h-2-yo)/2)
+end
+
 function newMenuItem(string, desc, windowStack, execute, objectRef)
     local item = {}
 
@@ -33,7 +42,7 @@ function newListPointer(x, y, yo, length, dy)
     pointer.dy = dy
     pointer.isVisible = true
     pointer.isFocused = true
-    pointer.timer = 0.25
+    pointer.timer = 0.30
 
     function pointer:moveDown()
         if pointer.isFocused and pointer.current+1 <= pointer.length then
@@ -56,7 +65,6 @@ function newListPointer(x, y, yo, length, dy)
     end
 
     function pointer:toggle()
-        pointer.isVisible = not pointer.isVisible
         pointer.isFocused = not pointer.isFocused
     end
 
@@ -65,15 +73,20 @@ function newListPointer(x, y, yo, length, dy)
         pointer.size = len
     end
 
-    function pointer:setVisible(bool)
-        pointer.isVisible = bool
+    function pointer:execute(currentMenuItem, ...)
+        pointer:toggle()
+        return currentMenuItem:execute(currentMenuItem, ...)  or "NO_RET"
     end
 
     function pointer:update(dt)
-        pointer.timer = pointer.timer-dt
-        if pointer.timer <= 0 then
-            pointer.timer = 0.25
-            pointer.isVisible = not pointer.isVisible
+        if not pointer.isFocused then
+            pointer.timer = pointer.timer-dt
+            if pointer.timer <= 0 then
+                pointer.timer = 0.30
+                pointer.isVisible = not pointer.isVisible
+            end
+        else
+            pointer.isVisible = true
         end
     end
 
@@ -119,15 +132,6 @@ function newWindow(x, y, w, h)
     return menubox
 end
 
-function adjustForName(yo, name)
-    if name == nil then return yo
-    else return yo+1, name end
-end
-
-function calculateDisplaySize(h, yo)
-    return math.floor((h-2-yo)/2)
-end
-
 function newListWindow(x, y, w, h, list, xo, yo, name)
     local popup = {}
 
@@ -136,18 +140,16 @@ function newListWindow(x, y, w, h, list, xo, yo, name)
     popup.w = w
     popup.h = h
     popup.list = list
-    --popup.cursorOnly = cursorOnly
     popup.xo = xo
-    --popup.yo = yo
     popup.yo, popup.name = adjustForName(yo, name)
     popup.pointer = newListPointer(x, y, popup.yo, #list, 2)
     popup.window = newWindow(x, y, w, h)
     popup.viewShift = 0
     popup.viewSize = calculateDisplaySize(popup.h, popup.yo)
-    --popup.isScrolling = #popup.list > popup.viewSize
 
     function popup:setList(list)
         popup.list = list
+        popup.viewSize = calculateDisplaySize(popup.h, popup.yo)
     end
 
     function popup:getCurrentMenuItem()
@@ -157,17 +159,7 @@ function newListWindow(x, y, w, h, list, xo, yo, name)
     function popup:execute(...)
         local arg = {...}
         local currentMenuItem = popup:getCurrentMenuItem()
-        return currentMenuItem:execute(currentMenuItem, ...)
-        --[[
-        if #arg == 0 then
-            return "NO_ARG"
-            --return currentMenuItem:execute(currentMenuItem) or "NO_PARAM+RETURN"
-        else
-            return "YES_ARG"
-            --return currentMenuItem:execute(...) or "NO_RETURN"
-        end
-        ]]--
-        
+        return popup.pointer:execute(currentMenuItem, ...)
     end
 
     function popup:reset()
@@ -218,11 +210,9 @@ function newListWindow(x, y, w, h, list, xo, yo, name)
         --DRAW LIST ARROWS
         if popup.viewShift > 0 then
             love.graphics.print("^", (popup.x+popup.w-2)*8, (popup.y+popup.yo)*8)
-            --love.graphics.print("^", (popup.x+2)*8, (popup.y+popup.yo)*8)
         end
         if popup.viewShift + popup.viewSize < #popup.list then
             love.graphics.print("v", (popup.x+popup.w-2)*8, (popup.y+popup.h-2)*8)
-            --love.graphics.print("v", (popup.x+2)*8, (popup.y+popup.h-2)*8)
         end
 
     end
@@ -230,6 +220,54 @@ function newListWindow(x, y, w, h, list, xo, yo, name)
     return popup
 end
 
-function newStringListWindow()
+function newClearWindow(x, y, list, yo, dy)
+    local popup = {}
+
+    popup.x = x
+    popup.y = y
+    popup.list = list
+    popup.yo = yo
+    popup.pointer = newListPointer(x, y, popup.yo, #list, dy)
+
+    function popup:setList(list)
+        popup.list = list
+    end
+
+    function popup:getCurrentMenuItem()
+        return popup.list[popup.pointer.current]
+    end
+
+    function popup:execute(...)
+        local arg = {...}
+        local currentMenuItem = popup:getCurrentMenuItem()
+        return popup.pointer:execute(currentMenuItem, ...)
+    end
+
+    function popup:reset()
+        popup.pointer:reset()
+    end
+
+    function popup:moveDown()
+        popup.pointer:moveDown()
+    end
+
+    function popup:moveUp()
+        popup.pointer:moveUp()
+       
+    end
+
+    function popup:update(dt)
+        popup.pointer:update(dt)
+    end
+
+    function popup:draw()
+        --DRAWING THE CURSOR
+        popup.pointer:draw(0)
+    end
+
+    return popup
+end
+
+function newStatsWindow()
 
 end

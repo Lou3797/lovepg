@@ -1,9 +1,37 @@
+function closeTopWindow(windowStack)
+    if #windowStack-1>0 then
+        windowStack[#windowStack-1].pointer:toggle()
+    end
+    table.remove(windowStack, #windowStack)
+end
+
 function test()
     return "TESTING THIS MENU ITEM"
 end
 
 function testItem()
     return "USING THIS ITEM"
+end
+
+function changeScaleOne(menuItem, ...)
+    scale = 1
+    love.window.setMode(window.width, window.height, 
+    {resizable=false, vsync=true, minwidth=window.width*scale, minheight=window.height*scale})
+    closeTopWindow(menuItem.stack)
+end
+
+function changeScaleTwo(menuItem, ...)
+    scale = 2
+    love.window.setMode(window.width, window.height, 
+    {resizable=false, vsync=true, minwidth=window.width*scale, minheight=window.height*scale})
+    closeTopWindow(menuItem.stack)
+end
+
+function changeScaleThree(menuItem, ...)
+    scale = 3
+    love.window.setMode(window.width, window.height, 
+    {resizable=false, vsync=true, minwidth=window.width*scale, minheight=window.height*scale})
+    closeTopWindow(menuItem.stack)
 end
 
 function createItemsList(windowStack)
@@ -46,4 +74,34 @@ function tempSpells(menuItem, ...)
         newMenuItem("ITEM0", "ITEM0", menuItem.stack, test)
     }, 1, 1, menuItem.string))
 
+end
+
+function statusPointer(menuItem, ...)
+    local menuItems = {}
+    for i,v in ipairs(party) do
+        menuItems[i] = newMenuItem(party[i].name, "STATUS>"..party[i].name, menuItem.stack, openStatusWindow, party[i])
+    end
+
+    table.insert(menuItem.stack, newClearWindow(13, 3,
+    menuItems, 3, 9))
+end
+
+function openConfig(menuItem, ...)
+    table.insert(menuItem.stack, newListWindow(13, 3, 19, 27,
+    {
+        newMenuItem("WINDOW SIZE", "CHANGE WINDOW SIZE", menuItem.stack, openWindowScaling)
+    }, 1, 1, menuItem.string))
+end
+
+function openWindowScaling(menuItem, ...)
+    table.insert(menuItem.stack, newListWindow(15, 8, 11, 10,
+    {
+        newMenuItem("256x240", "SCALE WINDOW x1", menuItem.stack, changeScaleOne),
+        newMenuItem("512x480", "SCALE WINDOW x2", menuItem.stack, changeScaleTwo),
+        newMenuItem("768x720", "SCALE WINDOW x3", menuItem.stack, changeScaleThree)
+    }, 1, 1))
+end
+
+function openStatusWindow(menuItem, ...)
+    displayPartyMemberStat(menuItem.objectRef)
 end

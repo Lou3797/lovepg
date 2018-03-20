@@ -77,6 +77,11 @@ function drawPartyMemberInfo(partyBars, i, yShift)
         love.graphics.print("MP:"..partyBars[i]["MP"].current, 20*8, (8+yShift)*8)
         love.graphics.print("/"..partyBars[i]["MP"].max, 26*8, (8+yShift)*8)
         partyBars[i]["MP"]:draw(20*8, (9+yShift)*8)
+        love.graphics.print("NEXT: 99999", 20*8, (10+yShift)*8)
     end
     
+end
+
+function displayPartyMemberStat(partyMember)
+    love.graphics.print(partyMember.name, 12*8, 5*8)
 end

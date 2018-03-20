@@ -1,7 +1,7 @@
 local pausemenu = {}
 
 local partyBars = {}
-local winodwStack = {}
+local windowStack = {}
 local headerStr = ""
 local headerTempStr = ""
 local pauseWindows = {
@@ -22,13 +22,13 @@ function pausemenu:enter()
 
     partyBars = createPartyBars()
 
-    table.insert(winodwStack, newListWindow(1, 4, 11, 16,
+    table.insert(windowStack, newListWindow(1, 4, 11, 16,
     {
-        newMenuItem("ITEM", "VIEW ITEMS IN INVENTORY", winodwStack, openItemWindow),
-        newMenuItem("SPELL", "USE/CHECK A SPELL", winodwStack, tempSpells),
-        newMenuItem("EQUIP", "", winodwStack, test),
-        newMenuItem("STATUS", "CHECK PARTY STATUS", winodwStack, test),
-        newMenuItem("PARTY", "", winodwStack, test)
+        newMenuItem("ITEM", "VIEW/USE ITEMS IN INVENTORY", windowStack, openItemWindow),
+        newMenuItem("SPELL", "CHECK/USE A SPELL", windowStack, tempSpells),
+        newMenuItem("EQUIP", "", windowStack, test),
+        newMenuItem("STATUS", "CHECK STATUS OF PARTY MEMBERS", windowStack, statusPointer),
+        newMenuItem("CONFIG", "CHANGE GAME SETTINGS", windowStack, openConfig)
     }, 1, 1))
 
 
@@ -39,17 +39,21 @@ function pausemenu:resume()
 end
 
 function pausemenu:leave()
-    winodwStack = {}
+    windowStack = {}
     headerStr = ""
     headerTempStr = ""
 end
 
 function pausemenu:update(dt)
-    if #winodwStack == 0 then
+    if #windowStack == 0 then
         return Gamestate.pop()
     end
 
-    headerStr = winodwStack[#winodwStack]:getCurrentMenuItem().desc
+    for i,v in ipairs(windowStack) do
+        windowStack[i]:update(dt)
+    end
+
+    headerStr = windowStack[#windowStack]:getCurrentMenuItem().desc
 
 end
 
@@ -63,19 +67,19 @@ function pausemenu:draw()
         drawPartyMemberInfo(partyBars, i)
     end
     --DRAW THE CURRENT WINDOW STACK
-    for i,v in ipairs(winodwStack) do
-        winodwStack[i]:draw()
+    for i,v in ipairs(windowStack) do
+        windowStack[i]:draw()
     end
     --DRAW THE HEADER
     love.graphics.print(headerStr..headerTempStr, 8, 8)
 end
 
 function pausemenu:keypressed(key)
-    local currentWindow = winodwStack[#winodwStack]
+    local currentWindow = windowStack[#windowStack]
     if key == 'return' then
         return Gamestate.pop()
     elseif key == 'x' then
-        table.remove(winodwStack, #winodwStack)
+        closeTopWindow(windowStack)
     elseif key == 'down' then
         currentWindow:moveDown()
     elseif key == 'up' then
