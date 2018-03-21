@@ -26,7 +26,7 @@ function pausemenu:enter()
     {
         newMenuItem("ITEM", "VIEW/USE ITEMS IN INVENTORY", windowStack, openItemWindow),
         newMenuItem("SPELL", "CHECK/USE A SPELL", windowStack, tempSpells),
-        newMenuItem("EQUIP", "", windowStack, test),
+        newMenuItem("EQUIP", nil, windowStack, test),
         newMenuItem("STATUS", "CHECK STATUS OF PARTY MEMBERS", windowStack, statusPointer),
         newMenuItem("CONFIG", "CHANGE GAME SETTINGS", windowStack, openConfig)
     }, 1, 1))
@@ -53,7 +53,7 @@ function pausemenu:update(dt)
         windowStack[i]:update(dt)
     end
 
-    headerStr = windowStack[#windowStack]:getCurrentMenuItem().desc
+    headerStr = windowStack[#windowStack]:getCurrentMenuItem().desc or ""
 
 end
 
@@ -86,7 +86,6 @@ function pausemenu:keypressed(key)
         currentWindow:moveUp()
     elseif key == 'z' then
         currentWindow:execute()
-        --headerStr = currentWindow:execute()
     end
 end
 

@@ -1,6 +1,10 @@
+function unfocusPointer(menuItem)
+    menuItem.stack[#menuItem.stack].pointer:setFocused(false)
+end
+
 function closeTopWindow(windowStack)
     if #windowStack-1>0 then
-        windowStack[#windowStack-1].pointer:toggle()
+        windowStack[#windowStack-1].pointer:setFocused(true)
     end
     table.remove(windowStack, #windowStack)
 end
@@ -17,21 +21,21 @@ function changeScaleOne(menuItem, ...)
     scale = 1
     love.window.setMode(window.width, window.height, 
     {resizable=false, vsync=true, minwidth=window.width*scale, minheight=window.height*scale})
-    closeTopWindow(menuItem.stack)
+    --closeTopWindow(menuItem.stack)
 end
 
 function changeScaleTwo(menuItem, ...)
     scale = 2
     love.window.setMode(window.width, window.height, 
     {resizable=false, vsync=true, minwidth=window.width*scale, minheight=window.height*scale})
-    closeTopWindow(menuItem.stack)
+    --closeTopWindow(menuItem.stack)
 end
 
 function changeScaleThree(menuItem, ...)
     scale = 3
     love.window.setMode(window.width, window.height, 
     {resizable=false, vsync=true, minwidth=window.width*scale, minheight=window.height*scale})
-    closeTopWindow(menuItem.stack)
+    --closeTopWindow(menuItem.stack)
 end
 
 function createItemsList(windowStack)
@@ -77,6 +81,7 @@ function tempSpells(menuItem, ...)
 end
 
 function statusPointer(menuItem, ...)
+    unfocusPointer(menuItem)
     local menuItems = {}
     for i,v in ipairs(party) do
         menuItems[i] = newMenuItem(party[i].name, "STATUS>"..party[i].name, menuItem.stack, openStatusWindow, party[i])
@@ -87,6 +92,7 @@ function statusPointer(menuItem, ...)
 end
 
 function openConfig(menuItem, ...)
+    unfocusPointer(menuItem)
     table.insert(menuItem.stack, newListWindow(13, 3, 19, 27,
     {
         newMenuItem("WINDOW SIZE", "CHANGE WINDOW SIZE", menuItem.stack, openWindowScaling)
@@ -94,6 +100,7 @@ function openConfig(menuItem, ...)
 end
 
 function openWindowScaling(menuItem, ...)
+    unfocusPointer(menuItem)
     table.insert(menuItem.stack, newListWindow(15, 8, 11, 10,
     {
         newMenuItem("256x240", "SCALE WINDOW x1", menuItem.stack, changeScaleOne),
@@ -103,5 +110,5 @@ function openWindowScaling(menuItem, ...)
 end
 
 function openStatusWindow(menuItem, ...)
-    displayPartyMemberStat(menuItem.objectRef)
+    table.insert(menuItem.stack, newStatsWindow(menuItem.objectRef))
 end

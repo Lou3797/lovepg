@@ -64,8 +64,8 @@ function newListPointer(x, y, yo, length, dy)
         pointer.current = 1
     end
 
-    function pointer:toggle()
-        pointer.isFocused = not pointer.isFocused
+    function pointer:setFocused(bool)
+        pointer.isFocused = bool
     end
 
     function pointer:changeSize(len)
@@ -74,7 +74,6 @@ function newListPointer(x, y, yo, length, dy)
     end
 
     function pointer:execute(currentMenuItem, ...)
-        pointer:toggle()
         return currentMenuItem:execute(currentMenuItem, ...)  or "NO_RET"
     end
 
@@ -268,6 +267,31 @@ function newClearWindow(x, y, list, yo, dy)
     return popup
 end
 
-function newStatsWindow()
+function newStatsWindow(partyMember)
+    local popup = {}
+    popup.window = newWindow(0, 3, 32, 27)
+    popup.partyMember = partyMember
 
+    function popup:update(dt)
+
+    end
+
+    function popup:getCurrentMenuItem()
+        temp = {}
+        temp.desc = partyMember.desc
+        return temp
+    end
+
+    function popup:draw()
+        popup.window:draw()
+        displayPartyMemberStat(popup.partyMember)
+    end
+
+    function popup:moveDown()
+    end
+
+    function popup:moveUp()       
+    end
+
+    return popup
 end
