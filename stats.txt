@@ -23,3 +23,20 @@ EVA - Affects evasion
 LCK - Affects general odds
 
 CHA - Affects sell price
+
+------------------------------------
+LV
+MHP
+HP
+MMP
+MP
+TB
+SB
+
+ATK
+DEF
+MGA
+MGD
+INT
+CON
+AGI

@@ -54,7 +54,7 @@ function battle:update(dt)
     --Increment TB and SB
     for i,v in ipairs(party) do
         local timeFactor = party[i].stats["AGI"]/2
-        local specialFactor = party[i].stats["AGI"]/2.5
+        local specialFactor = party[i].stats["AGI"]/2.75
         if partyBars[i]["TB"].current+(dt*timeFactor) < partyBars[i]["TB"].max then --and current bar does not equal max value
             partyBars[i]["TB"]:update(partyBars[i]["TB"].current+(dt*timeFactor))
         else

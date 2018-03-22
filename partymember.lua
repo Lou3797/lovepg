@@ -2,9 +2,10 @@ local classes = {}
 classes["KNIGHT"] = {}
 classes["ROGUE"] =  {}
 
-function newPartyMember(name, desc, class, imgX1, imgY1, imgX2, imgY2, stats, moveset)
+function newPartyMember(name, full, desc, class, imgX1, imgY1, imgX2, imgY2, stats, moveset)
     local member = {}
     member.name = name
+    member.full = full
     member.desc = desc
     member.img = love.graphics.newQuad(imgX1, imgY1, 32, 32, tiles:getDimensions())
     member.portrait = love.graphics.newQuad(imgX2, imgY2, 48, 48, tiles:getDimensions())
@@ -22,12 +23,15 @@ function newPartyMember(name, desc, class, imgX1, imgY1, imgX2, imgY2, stats, mo
 end
 
 partyMembers = {
-    newPartyMember("JUDY", "CARROT FARMER TURNED KNIGHT", "KNIGHT", 0, 56, 0, 19*8,
-    {["LV"]=12, ["MHP"]=70, ["HP"]=59, ["MMP"]=16, ["MP"]=3, ["TB"]=95, ["SB"]=75, ["AGI"]=15}), 
-    newPartyMember("NICK", "SHIFTY CHARLATAN FOX", "ROGUE", 0, 88, 48, 19*8,
-    {["LV"]=10, ["MHP"]=36, ["HP"]=11, ["MMP"]=34, ["MP"]=0, ["TB"]=110, ["SB"]=200, ["AGI"]=22}),
-    newPartyMember("BOGO", "HEAD OF THE ZOOTOPIAN GUARD", "ENFORCER", 0, 120, 96, 19*8,
-    {["LV"]=15, ["MHP"]=122, ["HP"]=107, ["MMP"]=25, ["MP"]=22, ["TB"]=90, ["SB"]=60, ["AGI"]=9})
+    newPartyMember("JUDY", "JUDY HOPPS", "CARROT FARMER TURNED KNIGHT", "KNIGHT", 0, 56, 0, 19*8,
+    {["LV"]=12, ["MHP"]=70, ["HP"]=59, ["MMP"]=16, ["MP"]=3, ["TB"]=95, ["SB"]=75,
+    ["ATK"]=18, ["DEF"]=13, ["MGA"]=6, ["MGD"]=5, ["INT"]=7, ["CON"]=10, ["AGI"]=15}), 
+    newPartyMember("NICK", "NICHOLAS WILDE", "SHIFTY CHARLATAN FOX", "ROGUE", 0, 88, 48, 19*8,
+    {["LV"]=10, ["MHP"]=36, ["HP"]=11, ["MMP"]=34, ["MP"]=0, ["TB"]=110, ["SB"]=200,
+    ["ATK"]=11, ["DEF"]=10, ["MGA"]=11, ["MGD"]=9, ["INT"]=17, ["CON"]=11, ["AGI"]=23}),
+    newPartyMember("BOGO", "CHIEF BOGO", "HEAD OF THE ZOOTOPIAN GUARD", "ENFORCER", 0, 120, 96, 19*8,
+    {["LV"]=15, ["MHP"]=122, ["HP"]=107, ["MMP"]=25, ["MP"]=22, ["TB"]=90, ["SB"]=60,
+    ["ATK"]=20, ["DEF"]=18, ["MGA"]=8, ["MGD"]=15, ["INT"]=9, ["CON"]=14, ["AGI"]=9})
 }
 
 function newMove(name, desc, type, mod)
@@ -93,5 +97,9 @@ function drawPartyMemberInfo(partyBars, i, yShift)
 end
 
 function displayPartyMemberStat(partyMember)
-    love.graphics.print(partyMember.name, 12*8, 5*8)
+    love.graphics.print(partyMember.full, 12*8, 5*8)
+
+
+    --love.graphics.draw()
+    love.graphics.print("BACK", 2*8, 27*8)
 end

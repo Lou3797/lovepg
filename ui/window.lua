@@ -9,6 +9,8 @@ menuQuads.bl = love.graphics.newQuad(0, 16, 8, 8, tiles:getDimensions())
 menuQuads.bc = love.graphics.newQuad(8, 16, 8, 8, tiles:getDimensions())
 menuQuads.br = love.graphics.newQuad(16, 16, 8, 8, tiles:getDimensions())
 
+local pointerQuad = love.graphics.newQuad(8, 24, 16, 16, tiles:getDimensions())
+
 function adjustForName(yo, name)
     if name == nil then return yo
     else return yo+1, name end
@@ -33,7 +35,6 @@ end
 function newListPointer(x, y, yo, length, dy)
     local pointer = {}
 
-    pointer.quad = love.graphics.newQuad(8, 24, 16, 16, tiles:getDimensions())
     pointer.current = 1
     pointer.length = length
     pointer.x = x
@@ -91,7 +92,7 @@ function newListPointer(x, y, yo, length, dy)
 
     function pointer:draw(viewShift)
         if pointer.isVisible then
-            love.graphics.draw(tiles, pointer.quad, (pointer.x)*8, ((1+pointer.y+pointer.yo)+(pointer.dy*(pointer.current-1-viewShift)))*8)
+            love.graphics.draw(tiles, pointerQuad, (pointer.x)*8, ((1+pointer.y+pointer.yo)+(pointer.dy*(pointer.current-1-viewShift)))*8)
         end
     end
 
@@ -267,10 +268,21 @@ function newClearWindow(x, y, list, yo, dy)
     return popup
 end
 
-function newStatsWindow(partyMember)
+function newStatsWindow(partyMember, windowStack)
     local popup = {}
     popup.window = newWindow(0, 3, 32, 27)
     popup.partyMember = partyMember
+    popup.stack = windowStack
+
+    function popup:execute(...)
+        closeTopWindow(popup.stack)
+    end
+
+    function popup:moveDown()
+    end
+
+    function popup:moveUp()       
+    end
 
     function popup:update(dt)
 
@@ -285,12 +297,7 @@ function newStatsWindow(partyMember)
     function popup:draw()
         popup.window:draw()
         displayPartyMemberStat(popup.partyMember)
-    end
-
-    function popup:moveDown()
-    end
-
-    function popup:moveUp()       
+        love.graphics.draw(tiles, pointerQuad, 0, 27*8)
     end
 
     return popup

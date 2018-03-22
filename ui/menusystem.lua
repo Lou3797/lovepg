@@ -110,5 +110,5 @@ function openWindowScaling(menuItem, ...)
 end
 
 function openStatusWindow(menuItem, ...)
-    table.insert(menuItem.stack, newStatsWindow(menuItem.objectRef))
+    table.insert(menuItem.stack, newStatsWindow(menuItem.objectRef, menuItem.stack))
 end
