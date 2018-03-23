@@ -43,7 +43,7 @@ function newListPointer(x, y, yo, length, dy)
     pointer.dy = dy
     pointer.isVisible = true
     pointer.isFocused = true
-    pointer.timer = 0.30
+    pointer.timer = 0.25
 
     function pointer:moveDown()
         if pointer.isFocused and pointer.current+1 <= pointer.length then
@@ -82,7 +82,7 @@ function newListPointer(x, y, yo, length, dy)
         if not pointer.isFocused then
             pointer.timer = pointer.timer-dt
             if pointer.timer <= 0 then
-                pointer.timer = 0.30
+                pointer.timer = 0.25
                 pointer.isVisible = not pointer.isVisible
             end
         else
@@ -160,6 +160,10 @@ function newListWindow(x, y, w, h, list, xo, yo, name)
         local arg = {...}
         local currentMenuItem = popup:getCurrentMenuItem()
         return popup.pointer:execute(currentMenuItem, ...)
+    end
+
+    function popup:cancel(windowStack)
+        closeTopWindow(windowStack)
     end
 
     function popup:reset()
@@ -243,6 +247,10 @@ function newClearWindow(x, y, list, yo, dy)
         return popup.pointer:execute(currentMenuItem, ...)
     end
 
+    function popup:cancel(windowStack)
+        closeTopWindow(windowStack)
+    end
+
     function popup:reset()
         popup.pointer:reset()
     end
@@ -276,6 +284,10 @@ function newStatsWindow(partyMember, windowStack)
 
     function popup:execute(...)
         closeTopWindow(popup.stack)
+    end
+
+    function popup:cancel(windowStack)
+        closeTopWindow(windowStack)
     end
 
     function popup:moveDown()

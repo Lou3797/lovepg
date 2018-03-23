@@ -79,7 +79,8 @@ function pausemenu:keypressed(key)
     if key == 'return' then
         return Gamestate.pop()
     elseif key == 'x' then
-        closeTopWindow(windowStack)
+        currentWindow:cancel(windowStack)
+        --closeTopWindow(windowStack)
     elseif key == 'down' then
         currentWindow:moveDown()
     elseif key == 'up' then

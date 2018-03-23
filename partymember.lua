@@ -24,10 +24,10 @@ end
 
 partyMembers = {
     newPartyMember("JUDY", "JUDY HOPPS", "CARROT FARMER TURNED KNIGHT", "KNIGHT", 0, 56, 0, 19*8,
-    {["LV"]=12, ["MHP"]=70, ["HP"]=59, ["MMP"]=16, ["MP"]=3, ["TB"]=95, ["SB"]=75,
+    {["LV"]=10, ["MHP"]=70, ["HP"]=59, ["MMP"]=16, ["MP"]=3, ["TB"]=95, ["SB"]=75,
     ["ATK"]=18, ["DEF"]=13, ["MGA"]=6, ["MGD"]=5, ["INT"]=7, ["CON"]=10, ["AGI"]=15}), 
     newPartyMember("NICK", "NICHOLAS WILDE", "SHIFTY CHARLATAN FOX", "ROGUE", 0, 88, 48, 19*8,
-    {["LV"]=10, ["MHP"]=36, ["HP"]=11, ["MMP"]=34, ["MP"]=0, ["TB"]=110, ["SB"]=200,
+    {["LV"]=12, ["MHP"]=36, ["HP"]=11, ["MMP"]=34, ["MP"]=0, ["TB"]=110, ["SB"]=200,
     ["ATK"]=11, ["DEF"]=10, ["MGA"]=11, ["MGD"]=9, ["INT"]=17, ["CON"]=11, ["AGI"]=23}),
     newPartyMember("BOGO", "CHIEF BOGO", "HEAD OF THE ZOOTOPIAN GUARD", "ENFORCER", 0, 120, 96, 19*8,
     {["LV"]=15, ["MHP"]=122, ["HP"]=107, ["MMP"]=25, ["MP"]=22, ["TB"]=90, ["SB"]=60,
@@ -96,8 +96,25 @@ function drawPartyMemberInfo(partyBars, i, yShift)
     
 end
 
+function displayIndividualStat(partyMember, stat, xo, yo)
+    love.graphics.print(stat.."", xo*8, yo*8)
+    local spacing = ""
+    if string.len(partyMember.stats[stat]) == 1 then
+        spacing = " "
+    end
+    love.graphics.print(spacing..partyMember.stats[stat], (xo+4)*8, (yo+0)*8)
+end
+
 function displayPartyMemberStat(partyMember)
-    love.graphics.print(partyMember.full, 12*8, 5*8)
+    love.graphics.print(partyMember.full, 4*8, 5*8)
+
+    displayIndividualStat(partyMember, "ATK", 21, 7)
+    displayIndividualStat(partyMember, "DEF", 21, 9)
+    displayIndividualStat(partyMember, "CON", 21, 11)
+    displayIndividualStat(partyMember, "MGA", 21, 13)
+    displayIndividualStat(partyMember, "MGD", 21, 15)
+    displayIndividualStat(partyMember, "INT", 21, 17)
+    displayIndividualStat(partyMember, "AGI", 21, 19)
 
 
     --love.graphics.draw()
