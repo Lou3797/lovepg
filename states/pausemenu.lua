@@ -53,6 +53,11 @@ function pausemenu:update(dt)
         windowStack[i]:update(dt)
     end
 
+    for i,v in ipairs(partyBars) do
+        partyBars[i]["HP"]:update(dt)
+        partyBars[i]["MP"]:update(dt)
+    end
+
     headerStr = windowStack[#windowStack]:getCurrentMenuItem().desc or ""
 
 end

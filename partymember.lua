@@ -61,8 +61,10 @@ function createPartyBars()
             memberBars["TB"] = newBar(stats["TB"], math.floor(stats["TB"]/2), 7, 3) --TB
             memberBars["SB"] = newBar(stats["SB"], 0, 7, 4) --SB
         elseif Gamestate.current() == pausemenu then
-            memberBars["HP"] = newBar(stats["MHP"], stats["HP"], 11, 0) --HP
-            memberBars["MP"] = newBar(stats["MMP"], stats["MP"], 11, 1) --MP
+            --memberBars["HP"] = newBar(stats["MHP"], stats["HP"], 11, 0) --HP
+            --memberBars["MP"] = newBar(stats["MMP"], stats["MP"], 11, 1) --MP
+            memberBars["HP"] = newPartyMemberBar(party[i], "MHP", "HP", 11, 0) --HP
+            memberBars["MP"] = newPartyMemberBar(party[i], "MMP", "MP", 11, 1) --MP
         end
         partyBars[i] = memberBars
     end
