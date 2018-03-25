@@ -20,18 +20,6 @@ function calculateDisplaySize(h, yo)
     return math.floor((h-2-yo)/2)
 end
 
-function newMenuItem(string, desc, windowStack, execute, objectRef)
-    local item = {}
-
-    item.string = string
-    item.desc = desc
-    item.stack = windowStack
-    item.execute = execute
-    item.objectRef = objectRef
-
-    return item
-end
-
 function newListPointer(x, y, yo, length, dy)
     local pointer = {}
 

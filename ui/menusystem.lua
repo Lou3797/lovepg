@@ -1,3 +1,15 @@
+function newMenuItem(string, desc, windowStack, execute, objectRef)
+    local item = {}
+
+    item.string = string
+    item.desc = desc
+    item.stack = windowStack
+    item.execute = execute --A function
+    item.objectRef = objectRef
+
+    return item
+end
+
 function unfocusPointer(menuItem)
     menuItem.stack[#menuItem.stack].pointer:setFocused(false)
 end
@@ -50,7 +62,7 @@ function createItemsList(windowStack)
         end
         displayString = displayString.."x"..item[2]
         table.insert(menuItems, newMenuItem(
-            displayString, item[1].desc, windowStack, testItem, item[1]
+            displayString, item[1].desc, windowStack, openPartyMemberChooser, item[1] --item[1].execute
         ))
     end
 
@@ -87,8 +99,7 @@ function statusPointer(menuItem, ...)
         menuItems[i] = newMenuItem(party[i].name, "STATUS>"..party[i].name, menuItem.stack, openStatusWindow, party[i])
     end
 
-    table.insert(menuItem.stack, newClearWindow(13, 3,
-    menuItems, 3, 9))
+    table.insert(menuItem.stack, newClearWindow(13, 3, menuItems, 3, 9))
 end
 
 function openConfig(menuItem, ...)
@@ -111,4 +122,13 @@ end
 
 function openStatusWindow(menuItem, ...)
     table.insert(menuItem.stack, newStatsWindow(menuItem.objectRef, menuItem.stack))
+end
+
+function openPartyMemberChooser(menuItem, ...)
+    unfocusPointer(menuItem)
+    local menuItems = {}
+    for i,v in ipairs(party) do
+        menuItems[i] = newMenuItem(party[i].name, menuItem.objectRef.name..">"..party[i].name, menuItem.stack, menuItem.objectRef.execute, party[i])
+    end
+    table.insert(menuItem.stack, newClearWindow(13, 3, menuItems, 3, 9))
 end

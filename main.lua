@@ -2,9 +2,11 @@ scale = 3
 love.graphics.setDefaultFilter("nearest", "nearest", 1)
 tiles = love.graphics.newImage("img/tiles.png")
 
+menusystem = require "ui.menusystem"
 bar = require "ui.bar"
 partymember = require "partymember"
 item = require "item"
+
 party = {
     partyMembers[1], partyMembers[3], partyMembers[2]
 }
@@ -14,7 +16,6 @@ partyItems = {
 
 battleEncounter = require "battleEncounter"
 pointer = require "ui.pointer"
-menusystem = require "ui.menusystem"
 menubox = require "ui.menubox"
 window = require "ui.window"
 Gamestate = require "libs.gamestate"

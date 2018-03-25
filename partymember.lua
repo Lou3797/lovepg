@@ -15,7 +15,7 @@ function newPartyMember(name, full, desc, class, imgX1, imgY1, imgX2, imgY2, sta
     member.mods = {{}, {}} --{{"AGI", 10}, {"ATK", 15}}
 
 
-    function member:changeStat(stat, num)
+    function member:modifyStat(stat, num)
         member.stats[stat] = member.stats[stat] + num
     end
 
@@ -107,7 +107,7 @@ end
 
 function displayPartyMemberStat(partyMember)
     love.graphics.print(partyMember.full, 4*8, 5*8)
-
+    love.graphics.print("HP:"..partyMember.stats["HP"].."/"..partyMember.stats["MHP"], 3*8, 7*8)
     displayIndividualStat(partyMember, "ATK", 21, 7)
     displayIndividualStat(partyMember, "DEF", 21, 9)
     displayIndividualStat(partyMember, "CON", 21, 11)
@@ -115,7 +115,6 @@ function displayPartyMemberStat(partyMember)
     displayIndividualStat(partyMember, "MGD", 21, 15)
     displayIndividualStat(partyMember, "INT", 21, 17)
     displayIndividualStat(partyMember, "AGI", 21, 19)
-
 
     --love.graphics.draw()
     love.graphics.print("BACK", 2*8, 27*8)
