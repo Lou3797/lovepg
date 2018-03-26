@@ -24,7 +24,7 @@ end
 function refreshItemWindow(menuItem)
     closeTopWindow(menuItem.stack)
     closeTopWindow(menuItem.stack)
-    openItemWindow(newMenuItem("ITEM", "VIEW/USE ITEMS IN INVENTORY", menuItem.stack, openItemWindow))
+    openItemWindow(newMenuItem("ITEMS", "VIEW/USE ITEMS IN INVENTORY", menuItem.stack, openItemWindow))
 end
 
 function test()

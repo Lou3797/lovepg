@@ -47,6 +47,7 @@ function newItem(name, desc, stat, effect, func)
     item.stat = stat
     item.effect = effect
     item.execute = func
+    --item.type = battle, menu, or both
 
     return item
 end

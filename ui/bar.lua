@@ -80,19 +80,16 @@ function newPartyMemberBar(partyMember, statMax, statCur, len, row)
     return bar
 end
 
-function newBar(max, cur, len, row, partyMember, statCur, statMax)
+function newBar(max, cur, len, row)
     local bar = {}
     bar.max = max
     bar.current = cur
     bar.length = len or 9
     bar.row = row or 0
-    bar.partyMember = partyMember
-    bar.max = partyMember.stats[statMax]
-    bar.current = partyMember.stats[statCur]
 
     function bar:update(cur, max)
-        bar.max = partyMember.stats[statMax]
-        bar.current = partyMember.stats[statCur]
+        bar.current = cur
+        bar.max = max or bar.max
     end
 
     function bar:changeRow(row)
