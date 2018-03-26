@@ -24,8 +24,9 @@ function pausemenu:enter()
 
     table.insert(windowStack, newListWindow(1, 4, 11, 16,
     {
-        newMenuItem("ITEM", "VIEW/USE ITEMS IN INVENTORY", windowStack, openItemWindow),
-        newMenuItem("SPELL", "CHECK/USE A SPELL", windowStack, tempSpells),
+        newMenuItem("ITEMS", "VIEW/USE ITEMS IN INVENTORY", windowStack, openItemWindow),
+        newMenuItem("K. ITEMS", "VIEW KEY ITEMS IN INVENTORY", windowStack, test),
+        newMenuItem("SPELLS", "CHECK/USE A SPELL", windowStack, tempSpells),
         newMenuItem("EQUIP", nil, windowStack, test),
         newMenuItem("STATUS", "CHECK STATUS OF PARTY MEMBERS", windowStack, statusPointer),
         newMenuItem("CONFIG", "CHANGE GAME SETTINGS", windowStack, openConfig)

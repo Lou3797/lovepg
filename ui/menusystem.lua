@@ -21,6 +21,12 @@ function closeTopWindow(windowStack)
     table.remove(windowStack, #windowStack)
 end
 
+function refreshItemWindow(menuItem)
+    closeTopWindow(menuItem.stack)
+    closeTopWindow(menuItem.stack)
+    openItemWindow(newMenuItem("ITEM", "VIEW/USE ITEMS IN INVENTORY", menuItem.stack, openItemWindow))
+end
+
 function test()
     return "TESTING THIS MENU ITEM"
 end

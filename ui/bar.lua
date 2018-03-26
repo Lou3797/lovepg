@@ -21,6 +21,8 @@ function newPartyMemberBar(partyMember, statMax, statCur, len, row)
     bar.partyMember = partyMember
     bar.max = partyMember.stats[statMax]
     bar.current = partyMember.stats[statCur]
+    bar.goal = bar.current
+    bar.timer = 0.025
 
     function bar:changeRow(row)
         bar.row = row
@@ -40,7 +42,20 @@ function newPartyMemberBar(partyMember, statMax, statCur, len, row)
 
     function bar:update(dt)
         bar.max = partyMember.stats[statMax]
-        bar.current = partyMember.stats[statCur]
+        bar.goal = partyMember.stats[statCur]
+        if bar.goal ~= bar.current then
+            bar.timer = bar.timer - dt
+            if bar.timer <= 0 then
+                if bar.goal < bar.current then
+                    bar.current = bar.current - 1
+                elseif bar.goal > bar.current then
+                    bar.current = bar.current + 1
+                end
+                bar.timer = 0.025
+            end
+        else
+            bar.timer = 0.025
+        end
     end
 
     function bar:draw(x,y)

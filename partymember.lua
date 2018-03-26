@@ -19,12 +19,22 @@ function newPartyMember(name, full, desc, class, imgX1, imgY1, imgX2, imgY2, sta
         member.stats[stat] = member.stats[stat] + num
     end
 
+    function member:restoreStat(curStat, maxStat, num)
+        local max = member.stats[maxStat]
+        local cur = member.stats[curStat]
+        if cur + num > max then
+            member.stats[curStat] = member.stats[maxStat]
+        else
+            member.stats[curStat] = member.stats[curStat] + num
+        end
+    end
+
     return member
 end
 
 partyMembers = {
     newPartyMember("JUDY", "JUDY HOPPS", "CARROT FARMER TURNED KNIGHT", "KNIGHT", 0, 56, 0, 19*8,
-    {["LV"]=10, ["MHP"]=70, ["HP"]=59, ["MMP"]=16, ["MP"]=3, ["TB"]=95, ["SB"]=75,
+    {["LV"]=10, ["MHP"]=70, ["HP"]=9, ["MMP"]=16, ["MP"]=3, ["TB"]=95, ["SB"]=75,
     ["ATK"]=18, ["DEF"]=13, ["MGA"]=6, ["MGD"]=5, ["INT"]=7, ["CON"]=10, ["AGI"]=15}), 
     newPartyMember("NICK", "NICHOLAS WILDE", "SHIFTY CHARLATAN FOX", "ROGUE", 0, 88, 48, 19*8,
     {["LV"]=12, ["MHP"]=36, ["HP"]=11, ["MMP"]=34, ["MP"]=0, ["TB"]=110, ["SB"]=200,
