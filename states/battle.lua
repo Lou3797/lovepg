@@ -1,3 +1,7 @@
+--[[
+This file is currently using code that will be deprecated and is in need of a massive refactor
+]]--
+
 local battle = {}
 local stats = party[1]["stats"]
 local swapTimer = 0.33
