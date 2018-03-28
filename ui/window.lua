@@ -144,10 +144,20 @@ function newListWindow(x, y, w, h, list, xo, yo, name)
         return popup.list[popup.pointer.current]
     end
 
+    function popup:getCurrentMenuItemDesc()
+        local temp = popup.list[popup.pointer.current]
+        if temp == nil then
+            return ""
+        end
+        return popup.list[popup.pointer.current].desc
+    end
+
     function popup:execute(...)
         local arg = {...}
-        local currentMenuItem = popup:getCurrentMenuItem()
-        return popup.pointer:execute(currentMenuItem, ...)
+        if #list >= 1 then
+            local currentMenuItem = popup:getCurrentMenuItem()
+            return popup.pointer:execute(currentMenuItem, ...)
+        end
     end
 
     function popup:cancel(windowStack)
@@ -229,6 +239,10 @@ function newClearWindow(x, y, list, yo, dy)
         return popup.list[popup.pointer.current]
     end
 
+    function popup:getCurrentMenuItemDesc()
+        return popup.list[popup.pointer.current].desc
+    end
+
     function popup:execute(...)
         local arg = {...}
         local currentMenuItem = popup:getCurrentMenuItem()
@@ -289,6 +303,12 @@ function newStatsWindow(partyMember, windowStack)
     end
 
     function popup:getCurrentMenuItem()
+        temp = {}
+        temp.desc = partyMember.desc
+        return temp
+    end
+
+    function popup:getCurrentMenuItemDesc()
         temp = {}
         temp.desc = partyMember.desc
         return temp
