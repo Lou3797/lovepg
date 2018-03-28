@@ -1,3 +1,6 @@
+--[[
+    THIS FILE IS TO BE DEPRECATED
+]]--
 local menuQuads = {}
 menuQuads.tl = love.graphics.newQuad(0, 0, 8, 8, tiles:getDimensions())
 menuQuads.tc = love.graphics.newQuad(8, 0, 8, 8, tiles:getDimensions())

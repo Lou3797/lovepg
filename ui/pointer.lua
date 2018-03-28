@@ -1,3 +1,7 @@
+--[[
+    THIS FILE IS TO BE DEPRECATED
+]]--
+
 function newPointer(xo, yo, items, dy, menuName)
     local pointer = {}
 
