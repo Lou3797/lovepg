@@ -1,7 +1,6 @@
 scale = 3
 love.graphics.setDefaultFilter("nearest", "nearest", 1)
 tiles = love.graphics.newImage("img/tiles.png")
-partyItems = {}
 
 menucontrols = require "ui.menucontrols"
 bar = require "ui.bar"
