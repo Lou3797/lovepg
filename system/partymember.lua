@@ -29,6 +29,10 @@ function newPartyMember(name, full, desc, class, imgX1, imgY1, imgX2, imgY2, sta
         end
     end
 
+    function member:isAlive()
+        return member.stats["HP"] > 0
+    end
+
     return member
 end
 
@@ -40,7 +44,7 @@ partyMembers = {
     {["LV"]=12, ["MHP"]=36, ["HP"]=11, ["MMP"]=34, ["MP"]=0, ["TB"]=110, ["SB"]=200,
     ["ATK"]=11, ["DEF"]=10, ["MGA"]=11, ["MGD"]=9, ["INT"]=17, ["CON"]=11, ["AGI"]=23}),
     newPartyMember("BOGO", "CHIEF BOGO", "HEAD OF THE ZOOTOPIAN GUARD", "ENFORCER", 0, 120, 96, 19*8,
-    {["LV"]=15, ["MHP"]=122, ["HP"]=107, ["MMP"]=25, ["MP"]=22, ["TB"]=90, ["SB"]=60,
+    {["LV"]=15, ["MHP"]=122, ["HP"]=0, ["MMP"]=25, ["MP"]=22, ["TB"]=90, ["SB"]=60,
     ["ATK"]=20, ["DEF"]=18, ["MGA"]=8, ["MGD"]=15, ["INT"]=9, ["CON"]=14, ["AGI"]=9})
 }
 

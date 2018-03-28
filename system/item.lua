@@ -65,15 +65,26 @@ function increaseStat(menuItem, ...) --menuItem, partyMember, item(?)
 end
 
 function usePotion(menuItem, ...) --menuItem, partyMember, item(?)
-    menuItem.objectRef:restoreStat("HP", "MHP", 30)
-    partyItems:sub(items[1], 1)
-    refreshItemWindow(menuItem)
+    if menuItem.objectRef:isAlive() then
+        menuItem.objectRef:restoreStat("HP", "MHP", 30)
+        partyItems:sub(items[1], 1)
+        refreshItemWindow(menuItem)
+    end
 end
 
 function useEther(menuItem, ...) --menuItem, partyMember, item(?)
     menuItem.objectRef:restoreStat("MP", "MMP", 15)
     partyItems:sub(items[2], 1)
     refreshItemWindow(menuItem)
+end
+
+function useSerum(menuItem, ...)
+    if not menuItem.objectRef:isAlive() then
+        menuItem.objectRef:restoreStat("HP", "MHP", math.floor(menuItem.objectRef.stats["MHP"]/2))
+        partyItems:sub(items[4], 1)
+        refreshItemWindow(menuItem)
+    end
+
 end
 
 items = {
@@ -84,7 +95,7 @@ items = {
     --3
     newItem("B.BERRY", "REMOVE ALL MODIFIERS TO ALLY", "ALL", 0, test),
     --4
-    newItem("SERUM", "REVIVE FALLEN ALLY W/ 50% HP", "MP", 15, test),
+    newItem("SERUM", "REVIVE FALLEN ALLY W/ 50% HP", "MP", 15, useSerum),
     --5
     newItem("SERUM", "REVIVE FALLEN ALLY W/ 50% HP", "MP", 15, test)
 }
