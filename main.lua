@@ -3,19 +3,15 @@ love.graphics.setDefaultFilter("nearest", "nearest", 1)
 tiles = love.graphics.newImage("img/tiles.png")
 partyItems = {}
 
-menusystem = require "ui.menusystem"
+menucontrols = require "ui.menucontrols"
 bar = require "ui.bar"
-partymember = require "partymember"
-item = require "item"
+partymember = require "system.partymember"
+item = require "system.item"
 
 party = {
     partyMembers[1], partyMembers[3], partyMembers[2]
 }
---[[
-partyItems = {
-    {items[1], 4}, {items[2], 2}, {items[4], 1}
-}
-]]--
+
 partyItems = initInventory()
 partyItems:add(items[1], 2)
 partyItems:add(items[2], 2)
@@ -23,7 +19,7 @@ partyItems:add(items[4], 1)
 partyItems:add(items[1], 1)
 partyItems:add(items[1], 1)
 
-battleEncounter = require "battleEncounter"
+battleEncounter = require "system.battleEncounter"
 pointer = require "ui.pointer"
 menubox = require "ui.menubox"
 window = require "ui.window"

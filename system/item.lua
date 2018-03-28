@@ -82,9 +82,9 @@ items = {
     --2
     newItem("ETHER", "RESTORE 15 MP TO ALLY", "MP", 15, useEther),
     --3
-    newItem("B.BERRY", "REMOVE ALL MODIFIERS TO ALLY", "ALL", 0),
+    newItem("B.BERRY", "REMOVE ALL MODIFIERS TO ALLY", "ALL", 0, test),
     --4
-    newItem("SERUM", "REVIVE FALLEN ALLY W/ 50% HP", "MP", 15),
+    newItem("SERUM", "REVIVE FALLEN ALLY W/ 50% HP", "MP", 15, test),
     --5
-    newItem("SERUM", "REVIVE FALLEN ALLY W/ 50% HP", "MP", 15)
+    newItem("SERUM", "REVIVE FALLEN ALLY W/ 50% HP", "MP", 15, test)
 }
