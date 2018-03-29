@@ -311,7 +311,7 @@ function newStatsWindow(partyMember, windowStack)
     function popup:getCurrentMenuItemDesc()
         temp = {}
         temp.desc = partyMember.desc
-        return temp
+        return temp.desc
     end
 
     function popup:draw()

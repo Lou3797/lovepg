@@ -59,7 +59,7 @@ function pausemenu:update(dt)
         partyBars[i]["MP"]:update(dt)
     end
 
-    headerStr = windowStack[#windowStack]:getCurrentMenuItemDesc()
+    headerStr = windowStack[#windowStack]:getCurrentMenuItemDesc() or ""
 
 end
 
